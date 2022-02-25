@@ -19,6 +19,9 @@ const Header = () => {
         </div>
 
         <div className='flex items-center space-x-6'>
+          <Link href='/'>
+            <a className='text-gray-400'>Home</a>
+          </Link>
           <Link href='/login'>
             <a className='text-gray-400'>Sign in</a>
           </Link>
