@@ -1,20 +1,40 @@
-import Head from 'next/head';
-import Image from 'next/image';
+import Banner from 'components/Banner';
+import GlobalFeed from 'components/GlobalFeed';
+import PopuplarTags from 'components/PopularTags';
+import { useEffect, useState } from 'react';
 
-export default function Home() {
+export default function Home(props) {
+  const [articles, setArticles] = useState(props.articles);
+
+  const fetchGlobalFeed = async () => {
+    console.log(process.env)
+    const data = await fetch(
+      `${process.env.API_BASE_URL}/articles?limit=10&offset=0`
+    ).then((response) => response.json());
+
+    setArticles(data.articles);
+  };
+
+  const onFetchFeed = () => {
+    fetchGlobalFeed();
+  };
+
   return (
     <>
-      <div className='flex h-[175px] bg-green-500 justify-center shadow-inner '>
-        <div className='flex flex-col self-center justify-center space-y-3'>
-          <h1 className='text-5xl font-semibold text-center text-white drop-shadow-lg'>
-            conduit
-          </h1>
-          <p className='text-xl text-center text-white drop-shadow-md'>
-            A place to shared you knowledge.
-          </p>
-        </div>
+      <Banner />
+      <div className='container flex flex-row p-10 mx-auto'>
+        <GlobalFeed articles={props.data.articles} onFetchFeed={onFetchFeed} />
+        <PopuplarTags />
       </div>
-      <div className='container p-10 mx-auto'></div>
     </>
   );
+}
+
+export async function getStaticProps() {
+  const data = await fetch(
+    `${process.env.API_BASE_URL}/articles?limit=10&offset=0`
+  ).then((response) => response.json());
+  return {
+    props: { data },
+  };
 }
