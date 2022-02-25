@@ -4,13 +4,24 @@ import PropTypes from 'prop-types';
 
 const GlobalFeed = ({ articles, onFetchFeed }) => {
   return (
-    <div className='flex-grow'>
-      <ul className='m-0 border-b-2 '>
-        <li className='p-2 border-b-2 w-fit text-lime-500 border-lime-500 relative top-[2px] cursor-pointer' onClick={onFetchFeed}>
-          Global Feed
-        </li>
-      </ul>
-      <ArticlePreview articles={articles} />
+    <div className='row'>
+      <div className='col-md-9'>
+        <div className='feed-toggle'>
+          <ul className='nav nav-pills outline-active'>
+            <li className='nav-item'>
+              <a className='nav-link disabled' href=''>
+                Your Feed
+              </a>
+            </li>
+            <li className='nav-item'>
+              <a className='nav-link active' href=''>
+                Global Feed
+              </a>
+            </li>
+          </ul>
+        </div>
+        <ArticlePreview articles={articles} />
+      </div>
     </div>
   );
 };
