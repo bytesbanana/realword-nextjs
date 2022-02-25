@@ -7,11 +7,11 @@ const response = {
 
 const PopularTags = () => {
   return (
-    <div class='col-md-3'>
-      <div class='sidebar'>
+    <div className='col-md-3'>
+      <div className='sidebar'>
         <p>Popular Tags</p>
 
-        <div class='tag-list'>
+        <div className='tag-list'>
           <Link href={'/'} passHref>
             <a className='tag-pill tag-default'>programming</a>
           </Link>
