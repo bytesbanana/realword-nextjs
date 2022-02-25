@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import ArticlePreview from 'components/ArticlePreviewList';
+import PopuplarTags from 'components/PopularTags';
 import PropTypes from 'prop-types';
 
-const GlobalFeed = ({ articles, onFetchFeed }) => {
+const GlobalFeed = ({ articles, tags }) => {
   return (
     <div className='row'>
       <div className='col-md-9'>
@@ -22,6 +23,7 @@ const GlobalFeed = ({ articles, onFetchFeed }) => {
         </div>
         <ArticlePreview articles={articles} />
       </div>
+      <PopuplarTags tags={tags} />
     </div>
   );
 };
