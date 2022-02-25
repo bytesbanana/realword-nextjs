@@ -35,15 +35,13 @@ const Header = () => {
               </li>
             </Link>
 
-            <Link href='/' passHref>
+            <Link href='/login' passHref>
               <li className='nav-item'>
-                <a className='nav-link' href=''>
-                  Sign in
-                </a>
+                <a className='nav-link'>Sign in</a>
               </li>
             </Link>
 
-            <Link href='/' passHref>
+            <Link href='/register' passHref>
               <li className='nav-item'>
                 <a className='nav-link' href=''>
                   Sign up
