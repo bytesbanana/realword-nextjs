@@ -7,7 +7,7 @@ export default function Home(props) {
   const [articles, setArticles] = useState(props.articles);
 
   const fetchGlobalFeed = async () => {
-    console.log(process.env)
+    console.log(process.env);
     const data = await fetch(
       `${process.env.API_BASE_URL}/articles?limit=10&offset=0`
     ).then((response) => response.json());
@@ -20,13 +20,13 @@ export default function Home(props) {
   };
 
   return (
-    <>
+    <div className='home-page'>
       <Banner />
-      <div className='container flex flex-row p-10 mx-auto'>
+      <div className='container page'>
         <GlobalFeed articles={props.data.articles} onFetchFeed={onFetchFeed} />
         <PopuplarTags />
       </div>
-    </>
+    </div>
   );
 }
 
