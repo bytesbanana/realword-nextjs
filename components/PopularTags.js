@@ -7,16 +7,36 @@ const response = {
 
 const PopularTags = () => {
   return (
-    <div className='px-4 py-2 mx-4 bg-gray-200 border border-gray-200 w-[255px] h-fit'>
-      <span className='text-sm'>Popular tags</span>
-      <div className='flex flex-wrap gap-1 py-4'>
-        {response.tags.map((t) => (
-          <Link href='/' key={t}>
-            <a className='px-3 py-1 text-xs text-white bg-gray-500 rounded-full'>
-              {t}
-            </a>
+    <div class='col-md-3'>
+      <div class='sidebar'>
+        <p>Popular Tags</p>
+
+        <div class='tag-list'>
+          <Link href={'/'} passHref>
+            <a className='tag-pill tag-default'>programming</a>
           </Link>
-        ))}
+          <Link href={'/'} passHref>
+            <a className='tag-pill tag-default'>javascript</a>
+          </Link>
+          <Link href={'/'} passHref>
+            <a className='tag-pill tag-default'>emberjs</a>
+          </Link>
+          <Link href={'/'} passHref>
+            <a className='tag-pill tag-default'>angularjs</a>
+          </Link>
+          <Link href={'/'} passHref>
+            <a className='tag-pill tag-default'>react</a>
+          </Link>
+          <Link href={'/'} passHref>
+            <a className='tag-pill tag-default'>mean</a>
+          </Link>
+          <Link href={'/'} passHref>
+            <a className='tag-pill tag-default'>node</a>
+          </Link>
+          <Link href={'/'} passHref>
+            <a className='tag-pill tag-default'>rails</a>
+          </Link>
+        </div>
       </div>
     </div>
   );
