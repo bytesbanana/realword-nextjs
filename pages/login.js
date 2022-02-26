@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import UserAPI from 'lib/api/user';
@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { appActions } from '../store/app';
 import { authActions } from '../store/auth';
+import ErrorList from 'components/ErrorList';
 
 const Login = () => {
   const router = useRouter();
@@ -13,18 +14,8 @@ const Login = () => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const loading = useSelector((state) => state.app.loading);
-  const loginUser = useSelector((state) => state.auth.user);
-  const dispatch = useDispatch();
 
-  const showErrors = () => {
-    <ul className='error-messages'>
-      {Object.keys(errors).map((key) => (
-        <li key={key}>
-          `${key} ${errors[key]}
-        </li>
-      ))}
-    </ul>;
-  };
+  const dispatch = useDispatch();
 
   const loginHandler = async (e) => {
     e.preventDefault();
@@ -54,7 +45,7 @@ const Login = () => {
                 <a>Or create new account</a>
               </Link>
             </p>
-            {errors && showErrors()}
+            {errors && <ErrorList errors={errors} />}
 
             <form onSubmit={loginHandler}>
               <fieldset className='form-group'>
