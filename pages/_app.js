@@ -1,7 +1,9 @@
 import 'styles/globals.css';
-import Header from 'components/Header';
 import Head from 'next/head';
-import Link from 'next/link';
+
+import { Provider } from 'react-redux';
+import store from 'store';
+import Layout from 'components/Layout';
 
 function MyApp({ Component, pageProps }) {
   return (
@@ -10,8 +12,11 @@ function MyApp({ Component, pageProps }) {
         <meta charSet='utf-8' />
         <title>Conduit</title>
       </Head>
-      <Header />
-      <Component {...pageProps} />
+      <Provider store={store}>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+      </Provider>
     </>
   );
 }
