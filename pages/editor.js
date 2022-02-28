@@ -54,7 +54,7 @@ const Editor = () => {
       <div className='container page'>
         <div className='row'>
           <div className='col-md-10 offset-md-1 col-xs-12'>
-            <form onSubmit={submitHandler}>
+            <form>
               {errors && <ErrorList errors={errors} />}
 
               <fieldset>
@@ -107,7 +107,8 @@ const Editor = () => {
                 </fieldset>
                 <button
                   className='btn btn-lg pull-xs-right btn-primary'
-                  type='submit'
+                  type='button'
+                  onClick={submitHandler}
                 >
                   Publish Article
                 </button>

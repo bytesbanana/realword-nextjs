@@ -1,21 +1,26 @@
 import Banner from 'components/Banner';
 import GlobalFeed from 'components/GlobalFeed';
 import { useState } from 'react';
+import ArticleAPI from 'lib/api/article';
+import TagAPI from 'lib/api/tag';
 
 export default function Home(props) {
   const [articles, setArticles] = useState(props.articles);
   const [tags, setTags] = useState(props.tags);
 
   const fetchGlobalFeed = async () => {
-    const data = await fetch(
-      `${process.env.API_BASE_URL}/articles?limit=10&offset=0`
-    ).then((response) => response.json());
-
+    const data = await ArticleAPI.getGlobalArticles();
     setArticles(data.articles);
+  };
+
+  const fetchTags = async () => {
+    const data = await TagAPI.getTags();
+    setTags(data.tags);
   };
 
   const onFetchFeed = () => {
     fetchGlobalFeed();
+    fetchTags();
   };
 
   return (
@@ -29,13 +34,9 @@ export default function Home(props) {
 }
 
 export async function getStaticProps() {
-  const articlesData = await fetch(
-    `${process.env.API_BASE_URL}/articles?limit=10&offset=0`
-  ).then((response) => response.json());
+  const articlesData = await ArticleAPI.getGlobalArticles();
 
-  const popularTagsData = await fetch(`${process.env.API_BASE_URL}/tags`).then(
-    (response) => response.json()
-  );
+  const popularTagsData = await TagAPI.getTags();
 
   return {
     props: { ...articlesData, ...popularTagsData },
