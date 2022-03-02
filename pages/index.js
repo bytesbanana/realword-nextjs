@@ -3,31 +3,33 @@ import GlobalFeed from 'components/GlobalFeed';
 import { useState } from 'react';
 import ArticleAPI from 'lib/api/article';
 import TagAPI from 'lib/api/tag';
+import { useDispatch } from 'react-redux';
+import { articleActions } from 'store/article';
 
 export default function Home(props) {
   const [articles, setArticles] = useState(props.articles);
-  const [tags, setTags] = useState(props.tags);
+  const dispatch = useDispatch();
 
   const fetchGlobalFeed = async () => {
     const data = await ArticleAPI.getGlobalArticles();
     setArticles(data.articles);
   };
 
-  const fetchTags = async () => {
-    const data = await TagAPI.getTags();
-    setTags(data.tags);
-  };
-
-  const onFetchFeed = () => {
-    fetchGlobalFeed();
-    fetchTags();
+  const onFetchFeed = async () => {
+    dispatch(articleActions.showLoading());
+    await fetchGlobalFeed();
+    dispatch(articleActions.hideLoading());
   };
 
   return (
     <div className='home-page'>
       <Banner />
       <div className='container page'>
-        <GlobalFeed articles={articles} onFetchFeed={onFetchFeed} tags={tags} />
+        <GlobalFeed
+          articles={articles}
+          onFetchFeed={onFetchFeed}
+          tags={props.tags}
+        />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ArticlePreview from 'components/ArticlePreviewList';
 import PopuplarTags from 'components/PopularTags';
 import PropTypes from 'prop-types';
@@ -10,9 +10,7 @@ const GlobalFeed = ({ articles, tags, onFetchFeed }) => {
         <div className='feed-toggle'>
           <ul className='nav nav-pills outline-active'>
             <li className='nav-item'>
-              <a className='nav-link disabled' href=''>
-                Your Feed
-              </a>
+              <a className='nav-link disabled'>Your Feed</a>
             </li>
             <li className='nav-item'>
               <a className='nav-link active' onClick={onFetchFeed}>
@@ -20,8 +18,8 @@ const GlobalFeed = ({ articles, tags, onFetchFeed }) => {
               </a>
             </li>
           </ul>
+          <ArticlePreview articles={articles} />
         </div>
-        <ArticlePreview articles={articles} />
       </div>
       <PopuplarTags tags={tags} />
     </div>
