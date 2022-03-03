@@ -28,7 +28,7 @@ const GlobalFeed = ({ articles, tags, onFetchFeed }) => {
 
 GlobalFeed.propTypes = {
   articles: PropTypes.arrayOf(PropTypes.object),
-  tags: PropTypes.arrayOf(PropTypes.object),
+  tags: PropTypes.arrayOf(PropTypes.string),
   onFetchFeed: PropTypes.func,
 };
 

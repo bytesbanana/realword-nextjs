@@ -1,16 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
 import { HeartIcon } from '@heroicons/react/solid';
-import dateFormat from 'dateformat';
+
 import Link from 'next/link';
+import { formatDate } from 'lib/date';
 
 const ArticlePreviewLitItem = ({ article }) => {
-  const formatDate = (dateStr) => {
-    const date = new Date(dateStr.toString());
-
-    return dateFormat(date, 'mmmm dd, yyyy');
-  };
-
   return (
     <div className='article-preview'>
       <div className='article-meta'>
@@ -33,21 +28,23 @@ const ArticlePreviewLitItem = ({ article }) => {
           <i className='ion-heart'></i> {article.favoritesCount}
         </button>
       </div>
-      <a href='' className='preview-link'>
-        <h1>{article.title}</h1>
-        <p>{article.description}</p>
-        <span>Read more...</span>
-        <ul className='tag-list'>
-          {article.tagList.map((tag) => {
-            const key = article.slug + tag;
-            return (
-              <Link href='/' key={key} passHref>
-                <li className='tag-default tag-pill tag-outline'>{tag}</li>
-              </Link>
-            );
-          })}
-        </ul>
-      </a>
+      <Link href={`/article/${article.slug}`} passHref>
+        <a className='preview-link'>
+          <h1>{article.title}</h1>
+          <p>{article.description}</p>
+          <span>Read more...</span>
+          <ul className='tag-list'>
+            {article.tagList.map((tag) => {
+              const key = article.slug + tag;
+              return (
+                <Link href='/' key={key} passHref>
+                  <li className='tag-default tag-pill tag-outline'>{tag}</li>
+                </Link>
+              );
+            })}
+          </ul>
+        </a>
+      </Link>
     </div>
   );
 };
