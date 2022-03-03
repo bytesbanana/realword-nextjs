@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 
 const TagList = (props) => {
+  console.log(props);
   return (
     <div className={`tag-list ${props.className || ''}`} style={props.style}>
       {props.tags.map((tag) => (
         <Link href={'/'} passHref key={tag}>
           <a
             className={`tag-pill tag-default ${
-              !props.outline === 'secondary' || 'tag-outline'
+              !props.variant === 'secondary' || 'tag-outline'
             }`}
           >
             {tag}
@@ -20,13 +21,13 @@ const TagList = (props) => {
   );
 };
 TagList.propTypes = {
-  tags: PropTypes.oneOf(PropTypes.object),
-  variant: PropTypes.arrayOf(['primary', 'secondary']),
+  tags: PropTypes.arrayOf(PropTypes.string),
+  variant: PropTypes.oneOf(['primary', 'secondary']),
 };
 
 TagList.defaultProps = {
   tags: [],
-  outline: 'primary',
+  variant: 'primary',
 };
 
 export default TagList;
