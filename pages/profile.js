@@ -1,12 +1,27 @@
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import UserAPI from 'lib/api/user';
+import ArticleAPI from 'lib/api/article';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
+import ArticlePreview from 'components/ArticlePreviewList';
 
 const Profile = ({ profile }) => {
   const currentUser = useSelector((state) => state.auth.user);
   const menuDataRef = useRef(['My Articles', 'Favorted Articles']);
   const [selectedTab, setSelectedTab] = useState(0);
+  const [myArticles, setMyArticles] = useState([]);
+
+  const fetchMyArticles = useCallback(() => {
+    if (currentUser) {
+      ArticleAPI.getArticleByAuthor().then((data) => {
+        setMyArticles(data.articles || []);
+      });
+    }
+  }, [currentUser]);
+
+  useEffect(() => {
+    fetchMyArticles();
+  }, [fetchMyArticles]);
 
   const editProfileHandler = () => {};
 
@@ -34,6 +49,9 @@ const Profile = ({ profile }) => {
         &nbsp; Follow {profile.username}
       </button>
     );
+  };
+  const renderMyArticles = () => {
+    return <ArticlePreview articles={myArticles} />;
   };
 
   return (
@@ -75,6 +93,7 @@ const Profile = ({ profile }) => {
                 ))}
               </ul>
             </div>
+            {selectedTab === 0 && renderMyArticles()}
           </div>
         </div>
       </div>
