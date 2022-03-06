@@ -28,7 +28,7 @@ const Profile = ({ profile }) => {
   const followUserHandler = () => {};
 
   const renderProfileAction = () => {
-    if (currentUser?.username === profile.username) {
+    if (currentUser?.username === profile?.username) {
       return (
         <button
           className='btn btn-sm btn-outline-secondary action-btn'
@@ -46,7 +46,7 @@ const Profile = ({ profile }) => {
         onClick={followUserHandler}
       >
         <i className='ion-plus-round'></i>
-        &nbsp; Follow {profile.username}
+        &nbsp; Follow {profile?.username}
       </button>
     );
   };
@@ -62,14 +62,14 @@ const Profile = ({ profile }) => {
             <div className='col-xs-12 col-md-10 offset-md-1'>
               <Image
                 className='user-img'
-                src={profile.image}
+                src={profile?.image}
                 width={100}
                 height={100}
-                alt={profile.Profileusername}
+                alt={profile?.username}
               />
 
-              <h4>{profile.username}</h4>
-              <p>{profile.bio}</p>
+              <h4>{profile?.username}</h4>
+              <p>{profile?.bio}</p>
               {renderProfileAction()}
             </div>
           </div>
