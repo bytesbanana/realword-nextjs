@@ -13,7 +13,7 @@ const Profile = ({ profile }) => {
 
   const fetchMyArticles = useCallback(() => {
     if (currentUser) {
-      ArticleAPI.getArticleByAuthor().then((data) => {
+      ArticleAPI.getArticleByAuthor(currentUser.username).then((data) => {
         setMyArticles(data.articles || []);
       });
     }
