@@ -4,12 +4,14 @@ import ArticleAPI from 'lib/api/article';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import ArticlePreview from 'components/ArticlePreviewList';
+import { useRouter } from 'next/router';
 
 const Profile = ({ profile }) => {
   const currentUser = useSelector((state) => state.auth.user);
   const menuDataRef = useRef(['My Articles', 'Favorted Articles']);
   const [selectedTab, setSelectedTab] = useState(0);
   const [myArticles, setMyArticles] = useState([]);
+  const router = useRouter();
 
   const fetchMyArticles = useCallback(() => {
     if (currentUser) {
@@ -23,7 +25,9 @@ const Profile = ({ profile }) => {
     fetchMyArticles();
   }, [fetchMyArticles]);
 
-  const editProfileHandler = () => {};
+  const editProfileHandler = () => {
+    router.push('/settings');
+  };
 
   const followUserHandler = () => {};
 
