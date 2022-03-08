@@ -1,11 +1,11 @@
-import Link from 'next/link'
-import React from 'react'
-import { useSelector } from 'react-redux'
-import Image from 'next/image'
-import ActiveLink from './ActiveLink'
+import Link from 'next/link';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import Image from 'next/image';
+import ActiveLink from './ActiveLink';
 
 const Header = () => {
-  const user = useSelector((state) => state.auth.user)
+  const user = useSelector((state) => state.auth.user);
   return (
     <>
       <nav className="navbar navbar-light">
@@ -39,7 +39,7 @@ const Header = () => {
                   </li>
                 </ActiveLink>
 
-                <ActiveLink activeClassName="active" href="/register" passHref>
+                <ActiveLink activeClassName="active" href="/profile" passHref>
                   <li className="nav-item">
                     <a className="nav-link" style={{ display: 'flex' }}>
                       <Image
@@ -76,7 +76,7 @@ const Header = () => {
         </div>
       </nav>
     </>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
