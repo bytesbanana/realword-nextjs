@@ -8,7 +8,6 @@ import { formatDate } from 'lib/date';
 
 const Article = (props) => {
   const { body, tagList, author, createdAt, favoritesCount } = props.article;
-  console.log(props.article);
   return (
     <div className='article-page'>
       <ArticleBanner article={props.article} />

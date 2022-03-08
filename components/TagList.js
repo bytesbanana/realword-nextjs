@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 
 const TagList = (props) => {
-  console.log(props);
   return (
     <div className={`tag-list ${props.className || ''}`} style={props.style}>
       {props.tags.map((tag) => (
