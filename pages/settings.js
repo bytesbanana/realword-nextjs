@@ -2,9 +2,11 @@ import * as React from 'react';
 import UserAPI from 'lib/api/user';
 import { useDispatch } from 'react-redux';
 import { authActions } from 'store/auth';
+import { useRouter } from 'next/router';
 
 const Setting = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
   const [email, setEmail] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -34,6 +36,7 @@ const Setting = () => {
   const onLogoutClickHandler = () => {
     localStorage.removeItem('user');
     dispatch(authActions.logout());
+    router.push('/');
   };
 
   return (
