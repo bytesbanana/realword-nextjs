@@ -32,3 +32,10 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# vscode
+/.vscode
+
+# prettier
+.prettierrc
+.prettierignore
