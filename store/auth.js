@@ -9,6 +9,9 @@ const authSlide = createSlice({
     setUser(state, { payload }) {
       state.user = payload;
     },
+    logout(state, { payload }) {
+      state.user = null;
+    },
   },
 });
 

@@ -31,7 +31,7 @@ const Header = () => {
 
             {user && (
               <>
-                <ActiveLink activeClassName="active" href="/setting" passHref>
+                <ActiveLink activeClassName="active" href="/settings" passHref>
                   <li className="nav-item">
                     <a className="nav-link">
                       <i className="ion-gear-a"></i>&nbsp;Settings
