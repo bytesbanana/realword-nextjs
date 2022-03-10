@@ -107,7 +107,7 @@ const Profile = ({ profile }) => {
 
 export default Profile;
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const profile = await UserAPI.profile();
 
   return {

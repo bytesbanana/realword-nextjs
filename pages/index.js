@@ -35,7 +35,7 @@ export default function Home(props) {
   );
 }
 
-export async function getStaticProps() {
+export async function getServerSideProps() {
   const articlesData = await ArticleAPI.getGlobalArticles();
 
   const popularTagsData = await TagAPI.getTags();
