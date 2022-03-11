@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import ArticlePreview from 'components/ArticlePreviewList';
 import { useRouter } from 'next/router';
+import { IMAGE_BASE_URL } from 'lib/const'
 
 const Profile = ({ profile }) => {
 const currentUser = useSelector((state) => state.auth.user);
@@ -66,7 +67,7 @@ return (
           <div className='col-xs-12 col-md-10 offset-md-1'>
             <Image
               className='user-img'
-              src={profile?.image || 'https://api.realworld.io/images/smiley-cyrus.jpeg'}
+              src={profile?.image || `${IMAGE_BASE_URL}/smiley-cyrus.jpeg`}
               width={100}
               height={100}
               alt={profile?.username}
