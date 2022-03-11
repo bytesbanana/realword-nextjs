@@ -7,112 +7,112 @@ import ArticlePreview from 'components/ArticlePreviewList';
 import { useRouter } from 'next/router';
 
 const Profile = ({ profile }) => {
-  const currentUser = useSelector((state) => state.auth.user);
-  const menuDataRef = useRef(['My Articles', 'Favorted Articles']);
-  const [selectedTab, setSelectedTab] = useState(0);
-  const [myArticles, setMyArticles] = useState([]);
-  const router = useRouter();
+const currentUser = useSelector((state) => state.auth.user);
+const menuDataRef = useRef(['My Articles', 'Favorted Articles']);
+const [selectedTab, setSelectedTab] = useState(0);
+const [myArticles, setMyArticles] = useState([]);
+const router = useRouter();
 
-  const fetchMyArticles = useCallback(() => {
-    if (currentUser) {
-      ArticleAPI.getArticleByAuthor(currentUser.username).then((data) => {
-        setMyArticles(data.articles || []);
-      });
-    }
-  }, [currentUser]);
+const fetchMyArticles = useCallback(() => {
+  if (currentUser) {
+    ArticleAPI.getArticleByAuthor(currentUser.username).then((data) => {
+      setMyArticles(data.articles || []);
+    });
+  }
+}, [currentUser]);
 
-  useEffect(() => {
-    fetchMyArticles();
-  }, [fetchMyArticles]);
+useEffect(() => {
+  fetchMyArticles();
+}, [fetchMyArticles]);
 
-  const editProfileHandler = () => {
-    router.push('/settings');
-  };
+const editProfileHandler = () => {
+  router.push('/settings');
+};
 
-  const followUserHandler = () => {};
+const followUserHandler = () => {};
 
-  const renderProfileAction = () => {
-    if (currentUser?.username === profile?.username) {
-      return (
-        <button
-          className='btn btn-sm btn-outline-secondary action-btn'
-          onClick={editProfileHandler}
-        >
-          <i className='ion-gear-a'></i>
-          &nbsp; Edit Profile Settings
-        </button>
-      );
-    }
-
+const renderProfileAction = () => {
+  if (currentUser?.username === profile?.username) {
     return (
       <button
         className='btn btn-sm btn-outline-secondary action-btn'
-        onClick={followUserHandler}
+        onClick={editProfileHandler}
       >
-        <i className='ion-plus-round'></i>
-        &nbsp; Follow {profile?.username}
+        <i className='ion-gear-a'></i>
+        &nbsp; Edit Profile Settings
       </button>
     );
-  };
-  const renderMyArticles = () => {
-    return <ArticlePreview articles={myArticles} />;
-  };
+  }
 
   return (
-    <div className='profile-page'>
-      <div className='user-info'>
-        <div className='container'>
-          <div className='row'>
-            <div className='col-xs-12 col-md-10 offset-md-1'>
-              <Image
-                className='user-img'
-                src={profile?.image}
-                width={100}
-                height={100}
-                alt={profile?.username}
-              />
+    <button
+      className='btn btn-sm btn-outline-secondary action-btn'
+      onClick={followUserHandler}
+    >
+      <i className='ion-plus-round'></i>
+      &nbsp; Follow {profile?.username}
+    </button>
+  );
+};
+const renderMyArticles = () => {
+  return <ArticlePreview articles={myArticles} />;
+};
 
-              <h4>{profile?.username}</h4>
-              <p>{profile?.bio}</p>
-              {renderProfileAction()}
-            </div>
-          </div>
-        </div>
-      </div>
-
+return (
+  <div className='profile-page'>
+    <div className='user-info'>
       <div className='container'>
         <div className='row'>
           <div className='col-xs-12 col-md-10 offset-md-1'>
-            <div className='articles-toggle'>
-              <ul className='nav nav-pills outline-active'>
-                {menuDataRef.current.map((menu, i) => (
-                  <li className='nav-item' key={i}>
-                    <a
-                      className={`nav-link ${i == selectedTab && 'active'}`}
-                      onClick={() => setSelectedTab(i)}
-                    >
-                      {menu}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            {selectedTab === 0 && renderMyArticles()}
+            <Image
+              className='user-img'
+              src={profile?.image || 'https://api.realworld.io/images/smiley-cyrus.jpeg'}
+              width={100}
+              height={100}
+              alt={profile?.username}
+            />
+
+            <h4>{profile?.username}</h4>
+            <p>{profile?.bio}</p>
+            {renderProfileAction()}
           </div>
         </div>
       </div>
     </div>
-  );
+
+    <div className='container'>
+      <div className='row'>
+        <div className='col-xs-12 col-md-10 offset-md-1'>
+          <div className='articles-toggle'>
+            <ul className='nav nav-pills outline-active'>
+              {menuDataRef.current.map((menu, i) => (
+                <li className='nav-item' key={i}>
+                  <a
+                    className={`nav-link ${i == selectedTab && 'active'}`}
+                    onClick={() => setSelectedTab(i)}
+                  >
+                    {menu}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          {selectedTab === 0 && renderMyArticles()}
+        </div>
+      </div>
+    </div>
+  </div>
+);
 };
 
 export default Profile;
 
 export async function getServerSideProps() {
-  const profile = await UserAPI.profile();
+const profile = await UserAPI.profile();
 
-  return {
-    props: {
-      ...profile,
-    },
-  };
+return {
+  props: {
+    ...profile,
+  },
+};
 }

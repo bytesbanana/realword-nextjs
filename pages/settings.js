@@ -16,20 +16,19 @@ const Setting = () => {
   const onSave = async (e) => {
     const user = JSON.parse(localStorage.getItem('user'));
     console.log('user', user);
-    try {
-      const dataUser = {
-        email,
-        username,
-        password,
-        bio,
-        image,
-        token: user.token,
-      };
 
-      const response = await UserAPI.setting(dataUser);
-      console.log('dataUser', dataUser, response);
-    } catch (error) {
-      console.log('error', error);
+    const dataUser = {
+      email,
+      username,
+      password,
+      bio,
+      image,
+      token: user.token,
+    };
+
+    const response = await UserAPI.setting(dataUser);
+    if (response.ok) {
+      router.push("/profile")
     }
   };
 
