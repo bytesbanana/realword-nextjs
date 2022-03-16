@@ -39,7 +39,7 @@ const Header = () => {
                   </li>
                 </ActiveLink>
 
-                <ActiveLink activeClassName="active" href="/profile" passHref>
+                <ActiveLink activeClassName="active" href={`/profile/${user.username}`} passHref>
                   <li className="nav-item">
                     <a className="nav-link" style={{ display: 'flex' }}>
                       <Image
