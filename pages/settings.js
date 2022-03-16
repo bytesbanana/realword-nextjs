@@ -1,10 +1,11 @@
-import * as React from 'react';
+import React, { useEffect } from 'react';
 import UserAPI from 'lib/api/user';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from 'store/auth';
 import { useRouter } from 'next/router';
 
 const Setting = () => {
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const router = useRouter();
   const [email, setEmail] = React.useState('');
@@ -13,9 +14,17 @@ const Setting = () => {
   const [bio, setBio] = React.useState('');
   const [image, setImage] = React.useState('');
 
+  useEffect(() => {
+    if (user) {
+      setEmail(user.email);
+      setUsername(user.username);
+      setBio(user.bio);
+      setImage(user.image);
+    }
+  }, [user]);
+
   const onSave = async (e) => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    console.log('user', user);
+    e.preventDefault();
 
     const dataUser = {
       email,
@@ -28,7 +37,10 @@ const Setting = () => {
 
     const response = await UserAPI.setting(dataUser);
     if (response.ok) {
-      router.push("/profile")
+      const updatedData = await response.json();
+      localStorage.setItem('user', JSON.stringify(updatedData));
+      dispatch(authActions.setUser(updatedData.user));
+      router.push(`/profile/${username}`);
     }
   };
 
@@ -44,13 +56,14 @@ const Setting = () => {
         <div className='row'>
           <div className='col-md-6 offset-md-3 col-xs-12'>
             <h1 className='text-xs-center'>Your Settings</h1>
-            <form>
+            <form onSubmit={onSave}>
               <fieldset>
                 <fieldset className='form-group'>
                   <input
                     className='form-control'
                     type='text'
                     placeholder='URL of profile picture'
+                    value={image}
                     onChange={(e) => setImage(e.target.value)}
                   />
                 </fieldset>
@@ -59,6 +72,7 @@ const Setting = () => {
                     className='form-control form-control-lg'
                     type='text'
                     placeholder='Your Name'
+                    value={username}
                     onChange={(e) => setUsername(e.target.value)}
                   />
                 </fieldset>
@@ -67,6 +81,7 @@ const Setting = () => {
                     className='form-control form-control-lg'
                     rows='8'
                     placeholder='Short bio about you'
+                    value={bio}
                     onChange={(e) => setBio(e.target.value)}
                   ></textarea>
                 </fieldset>
@@ -75,6 +90,7 @@ const Setting = () => {
                     className='form-control form-control-lg'
                     type='text'
                     placeholder='Email'
+                    value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </fieldset>
@@ -83,13 +99,13 @@ const Setting = () => {
                     className='form-control form-control-lg'
                     type='password'
                     placeholder='Password'
+                    value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
                 </fieldset>
                 <button
                   className='btn btn-lg btn-primary pull-xs-right'
-                  type='button'
-                  onClick={onSave}
+                  type='submit'
                 >
                   Update Settings test
                 </button>
