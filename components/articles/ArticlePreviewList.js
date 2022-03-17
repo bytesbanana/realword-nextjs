@@ -1,5 +1,5 @@
 import React from 'react';
-import ArticlePreviewListItem from 'components/ArticlePreviewListItem';
+import ArticlePreviewListItem from 'components/articles/ArticlePreviewListItem';
 import { useSelector } from 'react-redux';
 
 const ArticlePreview = ({ articles }) => {

@@ -1,6 +1,6 @@
 import TagList from 'components/TagList';
 import ArticleAPI from 'lib/api/article';
-import ArticleBanner from 'components/ArticleBanner';
+import ArticleBanner from 'components/articles/ArticleBanner';
 
 import React from 'react';
 import Image from 'next/image';

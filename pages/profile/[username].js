@@ -3,7 +3,7 @@ import UserAPI from 'lib/api/user';
 import ArticleAPI from 'lib/api/article';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
-import ArticlePreview from 'components/ArticlePreviewList';
+import ArticlePreview from 'components/articles/ArticlePreviewList';
 import { useRouter } from 'next/router';
 
 const Profile = ({ profile }) => {

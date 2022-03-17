@@ -1,5 +1,5 @@
 import React from 'react';
-import ArticlePreview from 'components/ArticlePreviewList';
+import ArticlePreview from 'components/articles/ArticlePreviewList';
 import PopuplarTags from 'components/PopularTags';
 import PropTypes from 'prop-types';
 
