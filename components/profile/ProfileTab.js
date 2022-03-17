@@ -11,7 +11,7 @@ const ProfileTab = ({ username }) => {
       <ul className='nav nav-pills outline-active'>
         <li className='nav-item' key={'my-articles'}>
           <Link href='/profile/[username]' as={`/profile/${username}`} passHref>
-            <a className={`nav-link ${!favorite && 'active'}`}>My Article</a>
+            <a className={`nav-link ${!favorite && 'active'}`}>My Articles</a>
           </Link>
         </li>
 
