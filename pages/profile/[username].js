@@ -3,15 +3,15 @@ import UserAPI from 'lib/api/user';
 import ArticleAPI from 'lib/api/article';
 import Image from 'next/image';
 import { useSelector } from 'react-redux';
-import ArticlePreview from 'components/articles/ArticlePreviewList';
+import ArticlePreviewList from 'components/articles/ArticlePreviewList';
 import { useRouter } from 'next/router';
+import ProfileTab from 'components/profile/ProfileTab';
 
 const Profile = ({ profile }) => {
-  const currentUser = useSelector((state) => state.auth.user);
-  const menuDataRef = useRef(['My Articles', 'Favorted Articles']);
-  const [selectedTab, setSelectedTab] = useState(0);
-  const [myArticles, setMyArticles] = useState([]);
   const router = useRouter();
+  const currentUser = useSelector((state) => state.auth.user);
+  const [myArticles, setMyArticles] = useState([]);
+  const showFavoriteArticle = router.query?.favorite;
 
   const fetchMyArticles = useCallback(() => {
     if (currentUser) {
@@ -25,37 +25,35 @@ const Profile = ({ profile }) => {
     fetchMyArticles();
   }, [fetchMyArticles]);
 
-  const editProfileHandler = () => {
-    router.push('/settings');
-  };
-
   const followUserHandler = () => {};
 
-  const renderProfileAction = () => {
-    if (currentUser?.username === profile?.username) {
-      return (
-        <button
-          className='btn btn-sm btn-outline-secondary action-btn'
-          onClick={editProfileHandler}
-        >
-          <i className='ion-gear-a'></i>
-          &nbsp; Edit Profile Settings
-        </button>
-      );
-    }
+  let profileActionButton = (
+    <button
+      className='btn btn-sm btn-outline-secondary action-btn'
+      onClick={followUserHandler}
+    >
+      <i className='ion-plus-round'></i>
+      &nbsp; Follow {profile?.username}
+    </button>
+  );
 
-    return (
+  if (currentUser?.username === profile?.username) {
+    profileActionButton = (
       <button
         className='btn btn-sm btn-outline-secondary action-btn'
-        onClick={followUserHandler}
+        onClick={editProfileHandler}
       >
-        <i className='ion-plus-round'></i>
-        &nbsp; Follow {profile?.username}
+        <i className='ion-gear-a'></i>
+        &nbsp; Edit Profile Settings
       </button>
     );
-  };
-  const renderMyArticles = () => {
-    return <ArticlePreview articles={myArticles} />;
+  }
+
+  const articles = showFavoriteArticle ? [] : myArticles;
+  const articleList = <ArticlePreviewList articles={articles} />;
+
+  const editProfileHandler = () => {
+    router.push('/settings');
   };
 
   return (
@@ -74,7 +72,7 @@ const Profile = ({ profile }) => {
 
               <h4>{profile?.username}</h4>
               <p>{profile?.bio}</p>
-              {renderProfileAction()}
+              {profileActionButton}
             </div>
           </div>
         </div>
@@ -83,21 +81,8 @@ const Profile = ({ profile }) => {
       <div className='container'>
         <div className='row'>
           <div className='col-xs-12 col-md-10 offset-md-1'>
-            <div className='articles-toggle'>
-              <ul className='nav nav-pills outline-active'>
-                {menuDataRef.current.map((menu, i) => (
-                  <li className='nav-item' key={i}>
-                    <a
-                      className={`nav-link ${i == selectedTab && 'active'}`}
-                      onClick={() => setSelectedTab(i)}
-                    >
-                      {menu}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            {selectedTab === 0 && renderMyArticles()}
+            <ProfileTab username={currentUser?.username} />
+            {articleList}
           </div>
         </div>
       </div>
