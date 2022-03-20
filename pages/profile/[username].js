@@ -23,7 +23,7 @@ const Profile = ({ profile }) => {
     if (username) {
       if (showFavoriteArticle) {
         ArticleAPI.getFavoriteArticles(username).then((data) => {
-          setFavoriteArticles(data);
+          setFavoriteArticles(data.articles);
         });
       } else {
         ArticleAPI.getArticleByAuthor(username).then((data) => {
