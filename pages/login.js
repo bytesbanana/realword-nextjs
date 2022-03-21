@@ -5,7 +5,6 @@ import UserAPI from 'lib/api/user';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { appActions } from '../store/app';
-import { authActions } from '../store/auth';
 import ErrorList from 'components/ErrorList';
 
 const Login = () => {
@@ -27,7 +26,6 @@ const Login = () => {
     dispatch(appActions.hideLoading());
     if (response.ok) {
       localStorage.setItem('user', JSON.stringify(data.user));
-      dispatch(authActions.setUser(data.user));
       router.push('/');
     } else {
       setErrors(data.errors);

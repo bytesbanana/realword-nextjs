@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
 import UserAPI from 'lib/api/user';
 import { useDispatch, useSelector } from 'react-redux';
-import { authActions } from 'store/auth';
 import { useRouter } from 'next/router';
 
 const Setting = () => {
-  const user = useSelector((state) => state.auth.user);
+  const user = JSON.parse(localStorage.getItem('user'))
   const dispatch = useDispatch();
   const router = useRouter();
   const [email, setEmail] = React.useState('');
@@ -39,14 +38,12 @@ const Setting = () => {
     if (response.ok) {
       const updatedData = await response.json();
       localStorage.setItem('user', JSON.stringify(updatedData));
-      dispatch(authActions.setUser(updatedData.user));
       router.push(`/profile/${username}`);
     }
   };
 
   const onLogoutClickHandler = () => {
     localStorage.removeItem('user');
-    dispatch(authActions.logout());
     router.push('/');
   };
 

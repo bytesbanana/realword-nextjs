@@ -9,7 +9,7 @@ import ProfileTab from 'components/profile/ProfileTab';
 
 const Profile = ({ profile }) => {
   const router = useRouter();
-  const currentUser = useSelector((state) => state.auth.user);
+  const currentUser = JSON.parse(localStorage.getItem('user'))
   const [myArticles, setMyArticles] = useState([]);
   const [favoriteArticles, setFavoriteArticles] = useState([]);
   const showFavoriteArticle = router.query?.favorite;

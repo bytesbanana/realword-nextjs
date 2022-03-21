@@ -5,7 +5,8 @@ import Image from 'next/image';
 import ActiveLink from './ActiveLink';
 
 const Header = () => {
-  const user = useSelector((state) => state.auth.user);
+  const user = JSON.parse(localStorage.getItem('user'))
+
   return (
     <>
       <nav className="navbar navbar-light">
