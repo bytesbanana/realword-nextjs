@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { appActions } from '../store/app';
 import ErrorList from 'components/ErrorList';
+import { authActions } from 'store/auth';
 
 const Login = () => {
   const router = useRouter();
@@ -25,7 +26,9 @@ const Login = () => {
 
     dispatch(appActions.hideLoading());
     if (response.ok) {
-      localStorage.setItem('user', JSON.stringify(data.user));
+      const user = JSON.stringify(data.user);
+      localStorage.setItem('user', user);
+      dispatch(authActions.setUser(user));
       router.push('/');
     } else {
       setErrors(data.errors);
