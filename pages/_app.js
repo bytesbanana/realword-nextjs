@@ -7,17 +7,15 @@ import Layout from 'components/Layout';
 
 function MyApp({ Component, pageProps }) {
   return (
-    <>
-      <Head>
-        <meta charSet='utf-8' />
-        <title>Conduit</title>
-      </Head>
-      <Provider store={store}>
+    <Provider store={store}>
+        <Head>
+          <meta charSet='utf-8' />
+          <title>Conduit</title>
+        </Head>
         <Layout>
           <Component {...pageProps} />
         </Layout>
-      </Provider>
-    </>
+    </Provider>
   );
 }
 
