@@ -8,16 +8,12 @@ import { useRouter } from 'next/router';
 import ProfileTab from 'components/profile/ProfileTab';
 
 const Profile = ({ profile }) => {
+  const currentUser = useSelector((state) => state.auth.user);
   const router = useRouter();
   const [myArticles, setMyArticles] = useState([]);
   const [favoriteArticles, setFavoriteArticles] = useState([]);
   const showFavoriteArticle = router.query?.favorite;
   const username = router.query?.username;
-
-  let currentUser;
-  if (typeof window !== 'undefined') {
-    currentUser = JSON.parse(localStorage.getItem('user'));
-  }
 
   if (username === 'undefined') {
     router.push('/');

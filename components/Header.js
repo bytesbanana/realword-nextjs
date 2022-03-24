@@ -5,11 +5,7 @@ import Image from 'next/image';
 import ActiveLink from './ActiveLink';
 
 const Header = () => {
-  const [user, setUser] = React.useState();
-
-  React.useEffect(() => {
-    setUser(JSON.parse(localStorage.getItem('user')));
-  }, []);
+  const user = useSelector((state) => state.auth.user);
 
   return (
     <>
