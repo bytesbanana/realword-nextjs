@@ -9,11 +9,15 @@ import ProfileTab from 'components/profile/ProfileTab';
 
 const Profile = ({ profile }) => {
   const router = useRouter();
-  const currentUser = JSON.parse(localStorage.getItem('user'))
   const [myArticles, setMyArticles] = useState([]);
   const [favoriteArticles, setFavoriteArticles] = useState([]);
   const showFavoriteArticle = router.query?.favorite;
   const username = router.query?.username;
+
+  let currentUser;
+  if (typeof window !== 'undefined') {
+    currentUser = JSON.parse(localStorage.getItem('user'));
+  }
 
   if (username === 'undefined') {
     router.push('/');
@@ -23,11 +27,11 @@ const Profile = ({ profile }) => {
     if (username) {
       if (showFavoriteArticle) {
         ArticleAPI.getFavoriteArticles(username).then((data) => {
-          setFavoriteArticles(data.articles);
+          setFavoriteArticles(data?.articles);
         });
       } else {
         ArticleAPI.getArticleByAuthor(username).then((data) => {
-          setMyArticles(data.articles || []);
+          setMyArticles(data?.articles || []);
         });
       }
     }
