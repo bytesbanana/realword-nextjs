@@ -26,8 +26,8 @@ const Login = () => {
 
     dispatch(appActions.hideLoading());
     if (response.ok) {
-      const user = JSON.stringify(data.user);
-      localStorage.setItem('user', user);
+      const { user } = data;
+      localStorage.setItem('user', JSON.stringify(user));
       dispatch(authActions.setUser(user));
       router.push('/');
     } else {
