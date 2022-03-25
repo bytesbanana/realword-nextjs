@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { formatDate } from 'lib/date';
 
@@ -25,7 +24,7 @@ const ArticlePreviewLitItem = (props) => {
     <div className='article-preview'>
       <div className='article-meta'>
         <a href='profile.html'>
-          <Image
+          <img
             src={article?.author?.image}
             alt={article.username}
             width={32}

@@ -3,7 +3,6 @@ import ArticleAPI from 'lib/api/article';
 import ArticleBanner from 'components/articles/ArticleBanner';
 
 import React from 'react';
-import Image from 'next/image';
 import { formatDate } from 'lib/date';
 
 const Article = (props) => {
@@ -26,7 +25,7 @@ const Article = (props) => {
         <div className='article-actions'>
           <div className='article-meta'>
             <a className='link-profile-holder'>
-              <Image
+              <img
                 objectFit='cover'
                 src={author.image}
                 width='32'

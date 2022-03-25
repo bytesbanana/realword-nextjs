@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import UserAPI from 'lib/api/user';
 import ArticleAPI from 'lib/api/article';
-import Image from 'next/image';
 import { useSelector } from 'react-redux';
 import ArticlePreviewList from 'components/articles/ArticlePreviewList';
 import { useRouter } from 'next/router';
@@ -75,7 +74,7 @@ const Profile = ({ profile }) => {
         <div className='container'>
           <div className='row'>
             <div className='col-xs-12 col-md-10 offset-md-1'>
-              <Image
+              <img
                 className='user-img'
                 src={profile?.image || '/smiley-cyrus.jpeg'}
                 width={100}

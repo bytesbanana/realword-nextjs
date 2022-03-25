@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import Image from 'next/image';
 import ActiveLink from './ActiveLink';
 
 const Header = () => {
@@ -47,7 +46,7 @@ const Header = () => {
                 >
                   <li className='nav-item'>
                     <a className='nav-link' style={{ display: 'flex' }}>
-                      <Image
+                      <img
                         className='user-pic'
                         src='https://api.realworld.io/images/smiley-cyrus.jpeg'
                         alt='User picture'

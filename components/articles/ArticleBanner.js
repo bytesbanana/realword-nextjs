@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { formatDate } from 'lib/date';
@@ -11,7 +10,7 @@ const ArticleBanner = ({ article }) => {
 
         <div className='article-meta'>
           <a className='link-profile-holder'>
-            <Image
+            <img
               objectFit='cover'
               src={article.author.image}
               width='32'
