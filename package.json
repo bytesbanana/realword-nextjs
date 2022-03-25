@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@badrap/bar-of-progress": "^0.1.2",
     "@heroicons/react": "^1.0.6",
     "@reduxjs/toolkit": "^1.8.0",
     "cookies": "^0.8.0",
