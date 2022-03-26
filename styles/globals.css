@@ -11,3 +11,7 @@ a:not([href]) {
   display: inline-block;
   vertical-align: middle;
 }
+
+.cursor-pointer {
+  cursor: pointer;
+}

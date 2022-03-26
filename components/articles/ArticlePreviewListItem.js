@@ -18,24 +18,24 @@ const ArticlePreviewLitItem = (props) => {
     setArticle(data.article);
   };
 
-  console.log(article.favorited);
-
+  console.log(article);
   return (
     <div className='article-preview'>
       <div className='article-meta'>
-        <a href='profile.html'>
+        <Link href={`/profile/${article.author.username}`} passHref>
           <img
             src={article?.author?.image}
-            alt={article.username}
+            alt={article.author.username}
             width={32}
             height={32}
             layout='fixed'
+            className='cursor-pointer'
           />
-        </a>
+        </Link>
         <div className='info'>
-          <a href='' className='author'>
-            Eric Simons
-          </a>
+          <Link href={`/profile/${article.author.username}`} passHref>
+            <a className='author'>{article.author.username}</a>
+          </Link>
           <span className='date'> {formatDate(article.createdAt)}</span>
         </div>
         <button
