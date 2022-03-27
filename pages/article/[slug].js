@@ -4,12 +4,18 @@ import ArticleBanner from 'components/articles/ArticleBanner';
 
 import React from 'react';
 import { formatDate } from 'lib/date';
+import { useSelector } from 'react-redux';
+import Comment from 'components/Comment';
+import CommentAPI from 'lib/api/comment';
 
-const Article = (props) => {
-  const { body, tagList, author, createdAt, favoritesCount } = props.article;
+const Article = ({ article, comments }) => {
+  const { body, tagList, author, createdAt, favoritesCount } = article;
+  const user = useSelector((state) => state.auth.user);
+  const isLoggedIn = !!user;
+
   return (
     <div className='article-page'>
-      <ArticleBanner article={props.article} />
+      <ArticleBanner article={article} />
       <div className='container page'>
         <div className='row article-content'>
           <div className='col-md-12'>
@@ -52,70 +58,44 @@ const Article = (props) => {
 
         <div className='row'>
           <div className='col-xs-12 col-md-8 offset-md-2'>
-            <form className='card comment-form'>
-              <div className='card-block'>
-                <textarea
-                  className='form-control'
-                  placeholder='Write a comment...'
-                  rows='3'
-                />
-              </div>
-              <div className='card-footer'>
-                <img
-                  src='http://i.imgur.com/Qr71crq.jpg'
-                  className='comment-author-img'
-                />
-                <button className='btn btn-sm btn-primary'>Post Comment</button>
-              </div>
-            </form>
-
-            <div className='card'>
-              <div className='card-block'>
-                <p className='card-text'>
-                  With supporting text below as a natural lead-in to additional
-                  content.
-                </p>
-              </div>
-              <div className='card-footer'>
-                <a href='' className='comment-author'>
+            {isLoggedIn && (
+              <form className='card comment-form'>
+                <div className='card-block'>
+                  <textarea
+                    className='form-control'
+                    placeholder='Write a comment...'
+                    rows='3'
+                  />
+                </div>
+                <div className='card-footer'>
                   <img
                     src='http://i.imgur.com/Qr71crq.jpg'
                     className='comment-author-img'
+                    alt=''
                   />
-                </a>
-                &nbsp;
-                <a href='' className='comment-author'>
-                  Jacob Schmidt
-                </a>
-                <span className='date-posted'>Dec 29th</span>
-              </div>
-            </div>
+                  <button className='btn btn-sm btn-primary'>
+                    Post Comment
+                  </button>
+                </div>
+              </form>
+            )}
 
-            <div className='card'>
-              <div className='card-block'>
-                <p className='card-text'>
-                  With supporting text below as a natural lead-in to additional
-                  content.
-                </p>
-              </div>
-              <div className='card-footer'>
-                <a href='' className='comment-author'>
-                  <img
-                    src='http://i.imgur.com/Qr71crq.jpg'
-                    className='comment-author-img'
-                  />
-                </a>
-                &nbsp;
-                <a href='' className='comment-author'>
-                  Jacob Schmidt
-                </a>
-                <span className='date-posted'>Dec 29th</span>
-                <span className='mod-options'>
-                  <i className='ion-edit'></i>
-                  <i className='ion-trash-a'></i>
-                </span>
-              </div>
-            </div>
+            {!isLoggedIn && (
+              <p>
+                <a ui-sref='app.login' href='#/login'>
+                  Sign in
+                </a>{' '}
+                or{' '}
+                <a ui-sref='app.register' href='#/register'>
+                  sign up
+                </a>{' '}
+                to add comments on this article.
+              </p>
+            )}
+            {comments &&
+              comments.map((comment) => (
+                <Comment key={comment.id} comment={comment} />
+              ))}
           </div>
         </div>
       </div>
@@ -126,10 +106,12 @@ const Article = (props) => {
 export async function getServerSideProps(context) {
   const { slug } = context.query;
   const data = await ArticleAPI.getArticleBySlug(slug);
+  const dataComments = await CommentAPI.getComment(slug);
 
   return {
     props: {
       article: data.article,
+      comments: dataComments.comments,
     },
   };
 }
