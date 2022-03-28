@@ -9,7 +9,7 @@ const TagList = (props) => {
         <Link href={'/'} passHref key={tag}>
           <a
             className={`tag-pill tag-default ${
-              !props.variant === 'secondary' || 'tag-outline'
+              !props.variant === 'secondary' && 'tag-outline'
             }`}
           >
             {tag}
