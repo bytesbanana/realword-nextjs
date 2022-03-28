@@ -1,16 +1,21 @@
 import Banner from 'components/Banner';
 import GlobalFeed from 'components/GlobalFeed';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ArticleAPI from 'lib/api/article';
 import TagAPI from 'lib/api/tag';
 import { useDispatch, useSelector } from 'react-redux';
 import { articleActions } from 'store/article';
 
 export default function Home(props) {
-  const user = useSelector(state => state.auth.user)
-  const [articles, setArticles] = useState(props.articles);
+  const user = useSelector((state) => state.auth.user);
+  const [articles, setArticles] = useState([]);
   const dispatch = useDispatch();
-  const isLoggedIn = !!user
+
+  const isLoggedIn = !!user;
+
+  useEffect(() => {
+    fetchGlobalFeed();
+  }, []);
 
   const fetchGlobalFeed = async () => {
     const data = await ArticleAPI.getGlobalArticles();
@@ -38,11 +43,9 @@ export default function Home(props) {
 }
 
 export async function getServerSideProps() {
-  const articlesData = await ArticleAPI.getGlobalArticles();
-
   const popularTagsData = await TagAPI.getTags();
 
   return {
-    props: { ...articlesData, ...popularTagsData },
+    props: { ...popularTagsData },
   };
 }
