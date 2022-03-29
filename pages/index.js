@@ -9,18 +9,24 @@ import { articleActions } from 'store/article';
 export default function Home(props) {
   const user = useSelector((state) => state.auth.user);
   const [articles, setArticles] = useState([]);
+  const [tags, setTags] = useState([]);
   const dispatch = useDispatch();
 
   const isLoggedIn = !!user;
-
-  useEffect(() => {
-    fetchGlobalFeed();
-  }, []);
-
   const fetchGlobalFeed = async () => {
     const data = await ArticleAPI.getGlobalArticles();
     setArticles(data.articles);
   };
+
+  const fetchTags = async () => {
+    const data = await TagAPI.getTags();
+    setTags(data.tags);
+  };
+
+  useEffect(() => {
+    fetchGlobalFeed();
+    fetchTags();
+  }, []);
 
   const onFetchFeed = async () => {
     dispatch(articleActions.showLoading());
@@ -32,20 +38,8 @@ export default function Home(props) {
     <div className='home-page'>
       {!isLoggedIn && <Banner />}
       <div className='container page'>
-        <GlobalFeed
-          articles={articles}
-          onFetchFeed={onFetchFeed}
-          tags={props.tags}
-        />
+        <GlobalFeed articles={articles} onFetchFeed={onFetchFeed} tags={tags} />
       </div>
     </div>
   );
-}
-
-export async function getServerSideProps() {
-  const popularTagsData = await TagAPI.getTags();
-
-  return {
-    props: { ...popularTagsData },
-  };
 }
