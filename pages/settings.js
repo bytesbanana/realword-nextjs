@@ -106,7 +106,7 @@ const Setting = () => {
                   className='btn btn-lg btn-primary pull-xs-right'
                   type='submit'
                 >
-                  Update Settings test
+                  Update Settings
                 </button>
               </fieldset>
             </form>
