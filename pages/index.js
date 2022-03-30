@@ -1,5 +1,5 @@
 import Banner from 'components/Banner';
-import GlobalFeed from 'components/GlobalFeed';
+import ArticleFeed from 'components/ArticleFeed';
 import { useEffect, useState } from 'react';
 import ArticleAPI from 'lib/api/article';
 import TagAPI from 'lib/api/tag';
@@ -38,7 +38,11 @@ export default function Home(props) {
     <div className='home-page'>
       {!isLoggedIn && <Banner />}
       <div className='container page'>
-        <GlobalFeed articles={articles} onFetchFeed={onFetchFeed} tags={tags} />
+        <ArticleFeed
+          articles={articles}
+          onFetchFeed={onFetchFeed}
+          tags={tags}
+        />
       </div>
     </div>
   );
