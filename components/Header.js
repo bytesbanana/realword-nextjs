@@ -48,7 +48,7 @@ const Header = () => {
                     <a className='nav-link' style={{ display: 'flex' }}>
                       <img
                         className='user-pic'
-                        src='https://api.realworld.io/images/smiley-cyrus.jpeg'
+                        src={user?.image}
                         alt='User picture'
                         width={26}
                         height={26}
