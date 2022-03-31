@@ -17,7 +17,7 @@ const ArticlePreview = ({ articles }) => {
 
   return (
     <>
-      {loading && <div>Loading articles... </div>}
+      {loading && <div className='article-preview'>Loading articles... </div>}
       {!loading && renderArticlesList()}
     </>
   );

@@ -3,25 +3,18 @@ import ArticlePreview from 'components/articles/ArticlePreviewList';
 import PopuplarTags from 'components/PopularTags';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
-
-const FeedType = {
-  global: 'GLOBAL',
-  your: 'YOUR',
-};
+import { FeedType } from 'lib/const';
 
 const ArticleFeed = ({ articles, tags, onFetchFeed }) => {
   const [currentFeed, setCurrentFeed] = useState(FeedType.global);
   const user = useSelector((state) => state.auth.user);
+  const isLoading = useSelector((state) => state.article.loading);
   const isLoggedIn = !!user;
 
-  const changeFeedHandler = (feedType) => {
-    setCurrentFeed(feedType);
-    if (feedType === FeedType.global) {
-      onFetchFeed();
-      return;
-    }
-    if (feedType === FeedType.your) {
-      return;
+  const changeFeedHandler = (e, feedType) => {
+    if (!isLoading) {
+      setCurrentFeed(feedType);
+      onFetchFeed(feedType);
     }
   };
 
@@ -33,7 +26,9 @@ const ArticleFeed = ({ articles, tags, onFetchFeed }) => {
             {isLoggedIn && (
               <li className='nav-item'>
                 <a
-                  className='nav-link'
+                  className={`nav-link ${
+                    currentFeed === FeedType.your ? 'active' : ''
+                  }`}
                   onClick={(e) => {
                     changeFeedHandler(e, FeedType.your);
                   }}
@@ -44,7 +39,9 @@ const ArticleFeed = ({ articles, tags, onFetchFeed }) => {
             )}
             <li className='nav-item'>
               <a
-                className='nav-link active'
+                className={`nav-link ${
+                  currentFeed === FeedType.global ? 'active' : ''
+                }`}
                 onClick={(e) => {
                   changeFeedHandler(e, FeedType.global);
                 }}

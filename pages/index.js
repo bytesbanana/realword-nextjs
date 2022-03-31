@@ -5,6 +5,7 @@ import ArticleAPI from 'lib/api/article';
 import TagAPI from 'lib/api/tag';
 import { useDispatch, useSelector } from 'react-redux';
 import { articleActions } from 'store/article';
+import { FeedType } from 'lib/const';
 
 export default function Home(props) {
   const user = useSelector((state) => state.auth.user);
@@ -13,9 +14,16 @@ export default function Home(props) {
   const dispatch = useDispatch();
 
   const isLoggedIn = !!user;
-  const fetchGlobalFeed = async () => {
-    const data = await ArticleAPI.getGlobalArticles();
-    setArticles(data.articles);
+  const fetchGlobalFeed = async (feedType) => {
+    let data;
+    if (feedType === FeedType.your) {
+      data = await ArticleAPI.getArticleFeed();
+    } else if (feedType === FeedType.global) {
+      data = await ArticleAPI.getGlobalArticles();
+    }
+    if (data?.articles) {
+      setArticles(data.articles);
+    }
   };
 
   const fetchTags = async () => {
@@ -24,13 +32,14 @@ export default function Home(props) {
   };
 
   useEffect(() => {
-    fetchGlobalFeed();
+    fetchGlobalFeed(FeedType.global);
     fetchTags();
   }, []);
 
-  const onFetchFeed = async () => {
+  const onFetchFeed = async (feedType) => {
     dispatch(articleActions.showLoading());
-    await fetchGlobalFeed();
+
+    await fetchGlobalFeed(feedType);
     dispatch(articleActions.hideLoading());
   };
 
