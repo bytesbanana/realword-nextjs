@@ -52,7 +52,6 @@ const Header = () => {
                         alt='User picture'
                         width={26}
                         height={26}
-                        objectFit='cover'
                       />
                       <span style={{ marginLeft: '5px' }}>
                         {user?.username}

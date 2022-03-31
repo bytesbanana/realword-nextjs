@@ -32,7 +32,6 @@ const Article = ({ article, comments }) => {
           <div className='article-meta'>
             <a className='link-profile-holder'>
               <img
-                objectFit='cover'
                 src={author.image}
                 width='32'
                 height='32'

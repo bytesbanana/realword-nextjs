@@ -11,7 +11,6 @@ const ArticleBanner = ({ article }) => {
         <div className='article-meta'>
           <a className='link-profile-holder'>
             <img
-              objectFit='cover'
               src={article.author.image}
               width='32'
               height='32'

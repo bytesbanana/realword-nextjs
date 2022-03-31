@@ -18,7 +18,6 @@ const ArticlePreviewLitItem = (props) => {
     setArticle(data.article);
   };
 
-  console.log(article);
   return (
     <div className='article-preview'>
       <div className='article-meta'>
