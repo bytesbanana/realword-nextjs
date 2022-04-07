@@ -2,7 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { formatDate } from 'lib/date';
 
-const ArticleBanner = ({ article, onFavoritePost, onUnFavoritePost }) => {
+const ArticleBanner = ({
+  article,
+  onFavoritePost,
+  onUnFavoritePost,
+  onFollowAuthor,
+  onUnfollowAuthor,
+}) => {
   return (
     <div className='banner'>
       <div className='container'>
@@ -23,9 +29,21 @@ const ArticleBanner = ({ article, onFavoritePost, onUnFavoritePost }) => {
             </a>
             <span className='date'>{formatDate(article?.createdAt)}</span>
           </div>
-          <button className='btn btn-sm btn-outline-secondary'>
+          <button
+            className={`btn btn-sm  ${
+              article?.author?.following
+                ? 'btn-secondary'
+                : 'btn-outline-secondary'
+            }`}
+            onClick={() => {
+              article?.author?.following
+                ? onUnfollowAuthor(article.author.username)
+                : onFollowAuthor(article.author.username);
+            }}
+          >
             <i className='ion-plus-round'></i>
-            &nbsp; Follow {article?.author?.username}
+            &nbsp; {article?.author?.following ? ' Unfollow ' : ' Follow '}
+            {article?.author?.username}
           </button>
           &nbsp;&nbsp;
           <button
@@ -51,6 +69,8 @@ ArticleBanner.propTypes = {
   article: PropTypes.oneOf([PropTypes.object]),
   onFavoritePost: PropTypes.func,
   onUnFavoritePost: PropTypes.func,
+  onFollowAuthor: PropTypes.func,
+  onUnfollowAuthor: PropTypes.func,
 };
 
 export default ArticleBanner;

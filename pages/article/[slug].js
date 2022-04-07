@@ -2,19 +2,29 @@ import TagList from 'components/TagList';
 import ArticleAPI from 'lib/api/article';
 import ArticleBanner from 'components/articles/ArticleBanner';
 
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { formatDate } from 'lib/date';
 import { useSelector } from 'react-redux';
 import Comment from 'components/Comment';
 import CommentAPI from 'lib/api/comment';
 import { useRouter } from 'next/router';
+import UserAPI from 'lib/api/user';
 
-const Article = ({ initialArticle, comments }) => {
-  const [article, setArticle] = useState(initialArticle);
+const Article = ({ comments }) => {
+  const [article, setArticle] = useState({});
   const user = useSelector((state) => state.auth.user);
   const isLoggedIn = !!user;
   const router = useRouter();
   const { slug } = router.query;
+
+  const fetchArticle = useCallback(async () => {
+    const data = await ArticleAPI.getArticleBySlug(slug);
+    setArticle(data?.article);
+  }, [slug]);
+
+  useEffect(() => {
+    fetchArticle();
+  }, [fetchArticle]);
 
   const favoritePost = async () => {
     const response = await ArticleAPI.favoriteArticle(slug);
@@ -28,8 +38,33 @@ const Article = ({ initialArticle, comments }) => {
     const response = await ArticleAPI.unfavoriteArticle(slug);
     if (response.ok) {
       const data = await response.json();
-
       setArticle(data.article);
+    }
+  };
+
+  const followAuthor = async (author) => {
+    const response = await UserAPI.follow(author);
+    if (response.ok) {
+      const data = await response.json();
+      setArticle((article) => {
+        return {
+          ...article,
+          author: data.profile,
+        };
+      });
+    }
+  };
+
+  const unfollowAuthor = async (author) => {
+    const response = await UserAPI.unfollow(author);
+    if (response.ok) {
+      const data = await response.json();
+      setArticle((article) => {
+        return {
+          ...article,
+          author: data.profile,
+        };
+      });
     }
   };
 
@@ -39,6 +74,8 @@ const Article = ({ initialArticle, comments }) => {
         article={article}
         onFavoritePost={favoritePost}
         onUnFavoritePost={unFavoritePost}
+        onFollowAuthor={followAuthor}
+        onUnfollowAuthor={unfollowAuthor}
       />
 
       <div className='container page'>
@@ -130,13 +167,12 @@ const Article = ({ initialArticle, comments }) => {
 export async function getServerSideProps(context) {
   const { slug } = context.query;
 
-  const data = await ArticleAPI.getArticleBySlug(slug);
+  // const data = await ArticleAPI.getArticleBySlug(slug);
   const dataComments = await CommentAPI.getComment(slug);
-  console.log(data);
 
   return {
     props: {
-      initialArticle: data.article,
+      // initialArticle: data.article,
       comments: dataComments.comments,
     },
   };
