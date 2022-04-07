@@ -2,27 +2,67 @@ import TagList from 'components/TagList';
 import ArticleAPI from 'lib/api/article';
 import ArticleBanner from 'components/articles/ArticleBanner';
 
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { formatDate } from 'lib/date';
 import { useSelector } from 'react-redux';
 import Comment from 'components/Comment';
 import CommentAPI from 'lib/api/comment';
+import { useRouter } from 'next/router';
 
-const Article = ({ article, comments }) => {
-  const { body, tagList, author, createdAt, favoritesCount } = article;
+const Article = ({ initialArticle, comments }) => {
+  const [article, setArticle] = useState(initialArticle);
   const user = useSelector((state) => state.auth.user);
   const isLoggedIn = !!user;
+  const router = useRouter();
+  const { slug } = router.query;
+
+  // const fetchArticleBySlug = useCallback(async () => {
+  //   const data = await ArticleAPI.getArticleBySlug(slug);
+  //   setArticle(data.article);
+  // }, [slug]);
+
+  const favoritePost = async () => {
+    const response = await ArticleAPI.favoriteArticle(slug);
+    if (response.ok) {
+      setArticle((article) => {
+        return {
+          ...article,
+          favorited: true,
+          favoritesCount: article.favoritesCount + 1,
+        };
+      });
+    }
+  };
+
+  const unFavoritePost = async () => {
+    const response = await ArticleAPI.unfavoriteArticle(slug);
+    if (response.ok) {
+      setArticle((article) => {
+        return {
+          ...article,
+          favorited: false,
+          favoritesCount: article.favoritesCount - 1,
+        };
+      });
+    }
+  };
 
   return (
     <div className='article-page'>
-      <ArticleBanner article={article} />
+      <ArticleBanner
+        article={article}
+        favorited={article.favorited}
+        onFavoritePost={favoritePost}
+        onUnFavoritePost={unFavoritePost}
+      />
+
       <div className='container page'>
         <div className='row article-content'>
           <div className='col-md-12'>
             <div>
-              <p>{body}</p>
+              <p>{article?.body}</p>
             </div>
-            <TagList tags={tagList} style={{ marginBottom: '16px' }} />
+            <TagList tags={article?.tagList} style={{ marginBottom: '16px' }} />
           </div>
         </div>
 
@@ -32,15 +72,15 @@ const Article = ({ article, comments }) => {
           <div className='article-meta'>
             <a className='link-profile-holder'>
               <img
-                src={author.image}
+                src={article?.author?.image}
                 width='32'
                 height='32'
-                alt={author.username}
+                alt={article?.author?.username}
               />
             </a>
             <div className='info'>
-              <a className='author'>{author.username}</a>
-              <span className='date'>{formatDate(createdAt)}</span>
+              <a className='author'>{article?.author?.username}</a>
+              <span className='date'>{formatDate(article?.createdAt)}</span>
             </div>
             <button className='btn btn-sm btn-outline-secondary'>
               <i className='ion-plus-round' />
@@ -50,7 +90,7 @@ const Article = ({ article, comments }) => {
             <button className='btn btn-sm btn-outline-primary'>
               <i className='ion-heart' />
               &nbsp; Favorite Article{' '}
-              <span className='counter'>({favoritesCount})</span>
+              <span className='counter'>({article?.favoritesCount})</span>
             </button>
           </div>
         </div>
@@ -106,10 +146,11 @@ export async function getServerSideProps(context) {
   const { slug } = context.query;
   const data = await ArticleAPI.getArticleBySlug(slug);
   const dataComments = await CommentAPI.getComment(slug);
+  console.log(data);
 
   return {
     props: {
-      article: data.article,
+      initialArticle: data.article,
       comments: dataComments.comments,
     },
   };

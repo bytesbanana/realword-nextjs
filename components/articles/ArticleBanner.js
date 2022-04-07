@@ -2,36 +2,51 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { formatDate } from 'lib/date';
 
-const ArticleBanner = ({ article }) => {
+const ArticleBanner = ({
+  article,
+  onFavoritePost,
+  onUnFavoritePost,
+  favorited,
+}) => {
+  console.log(article);
   return (
     <div className='banner'>
       <div className='container'>
-        <h1>{article.title}</h1>
+        <h1>{article?.title}</h1>
 
         <div className='article-meta'>
           <a className='link-profile-holder'>
             <img
-              src={article.author.image}
+              src={article?.author.image}
               width='32'
               height='32'
-              alt={article.author.username}
+              alt={article?.author.username}
             />
           </a>
           <div className='info'>
             <a href='' className='author'>
-              {article.author.username}
+              {article?.author.username}
             </a>
-            <span className='date'>{formatDate(article.createdAt)}</span>
+            <span className='date'>{formatDate(article?.createdAt)}</span>
           </div>
           <button className='btn btn-sm btn-outline-secondary'>
             <i className='ion-plus-round'></i>
-            &nbsp; Follow {article.author.username}
+            &nbsp; Follow {article?.author.username}
           </button>
           &nbsp;&nbsp;
-          <button className='btn btn-sm btn-outline-primary'>
-            <i className='ion-heart'></i>
-            &nbsp; Favorite Post{' '}
-            <span className='counter'>({article.favoritesCount})</span>
+          <button
+            className={`btn btn-sm ${
+              !article?.favorited ? 'btn-outline-primary' : 'btn-primary'
+            }`}
+            onClick={() =>
+              !article?.favorited ? onFavoritePost() : onUnFavoritePost()
+            }
+          >
+            <i className='ion-heart' style={{ paddingRight: '2px' }}></i>
+            {!article.favorited  ? 'Favorite' : 'Unfavorite'} Post
+            <span className='counter' style={{ paddingLeft: '2px' }}>
+              ({article?.favoritesCount})
+            </span>
           </button>
         </div>
       </div>
@@ -40,6 +55,8 @@ const ArticleBanner = ({ article }) => {
 };
 ArticleBanner.propTypes = {
   article: PropTypes.oneOf([PropTypes.object]),
+  onFavoritePost: PropTypes.func,
+  onUnFavoritePost: PropTypes.func,
 };
 
 export default ArticleBanner;
