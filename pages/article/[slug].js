@@ -2,7 +2,7 @@ import TagList from 'components/TagList';
 import ArticleAPI from 'lib/api/article';
 import ArticleBanner from 'components/articles/ArticleBanner';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { formatDate } from 'lib/date';
 import { useSelector } from 'react-redux';
 import Comment from 'components/Comment';
@@ -16,34 +16,20 @@ const Article = ({ initialArticle, comments }) => {
   const router = useRouter();
   const { slug } = router.query;
 
-  // const fetchArticleBySlug = useCallback(async () => {
-  //   const data = await ArticleAPI.getArticleBySlug(slug);
-  //   setArticle(data.article);
-  // }, [slug]);
-
   const favoritePost = async () => {
     const response = await ArticleAPI.favoriteArticle(slug);
     if (response.ok) {
-      setArticle((article) => {
-        return {
-          ...article,
-          favorited: true,
-          favoritesCount: article.favoritesCount + 1,
-        };
-      });
+      const data = await response.json();
+      setArticle(data.article);
     }
   };
 
   const unFavoritePost = async () => {
     const response = await ArticleAPI.unfavoriteArticle(slug);
     if (response.ok) {
-      setArticle((article) => {
-        return {
-          ...article,
-          favorited: false,
-          favoritesCount: article.favoritesCount - 1,
-        };
-      });
+      const data = await response.json();
+
+      setArticle(data.article);
     }
   };
 
@@ -51,7 +37,6 @@ const Article = ({ initialArticle, comments }) => {
     <div className='article-page'>
       <ArticleBanner
         article={article}
-        favorited={article.favorited}
         onFavoritePost={favoritePost}
         onUnFavoritePost={unFavoritePost}
       />
@@ -144,6 +129,7 @@ const Article = ({ initialArticle, comments }) => {
 
 export async function getServerSideProps(context) {
   const { slug } = context.query;
+
   const data = await ArticleAPI.getArticleBySlug(slug);
   const dataComments = await CommentAPI.getComment(slug);
   console.log(data);
