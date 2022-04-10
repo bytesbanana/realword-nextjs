@@ -1,10 +1,11 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
+import Error from 'next/error';
 
 export default NextAuth({
   secret: 'SECRET_KEY',
   callbacks: {
-    async jwt({ token: jwtToken, user }) {
+    jwt({ token: jwtToken, user }) {
       if (user) {
         const { token, ...rest } = user;
         jwtToken = {
@@ -23,6 +24,11 @@ export default NextAuth({
           username: jwt.username,
           bio: jwt.bio,
         };
+        if (jwt.errors) {
+          session.errors = {
+            ...jwt.errors,
+          };
+        }
       }
 
       return session;
@@ -52,7 +58,7 @@ export default NextAuth({
           return data.user;
         }
 
-        return null;
+        return data;
       },
     }),
   ],
