@@ -1,25 +1,34 @@
 import Link from 'next/link';
-import React, { useState } from 'react';
-import { signIn } from 'next-auth/react';
+import React, { useEffect, useState } from 'react';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 
 const Login = () => {
   const router = useRouter();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const { data: session, status } = useSession();
 
   const formSubmit = async (e) => {
     e.preventDefault();
-    const result = await signIn('credentials', {
+    await signIn('credentials', {
       redirect: false,
       email,
       password,
     });
-
-    if (result.ok) {
-      router.push('/');
-    }
   };
+
+  useEffect(() => {
+    if (!session) return;
+    if (session?.errors) {
+      signOut({
+        redirect: false,
+      });
+      return;
+    }
+
+    router.push('/');
+  }, [session, router]);
 
   return (
     <>
