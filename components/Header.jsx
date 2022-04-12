@@ -46,7 +46,14 @@ const Header = () => {
         <ul className='nav navbar-nav pull-xs-right'>
           {menus
             .filter((menu) => {
-              return (menu.auth && !!session) || menu?.auth === undefined;
+              const isMenuNeedAuth = menu?.auth;
+              if (isMenuNeedAuth === undefined) return true;
+
+              if (session) {
+                if (isMenuNeedAuth) return true;
+              } else {
+                return isMenuNeedAuth === false;
+              }
             })
             .map(({ name, pathName, icon = null }) => (
               <Link href={pathName} key={name} passHref>
@@ -62,24 +69,26 @@ const Header = () => {
               </Link>
             ))}
 
-          <Link
-            href={`/profile/${session?.user.username}`}
-            key={session?.user?.username}
-            passHref
-          >
-            <li className='nav-item'>
-              <a
-                className={`nav-link ${router.pathname.includes('/profile')}`}
-              >
-                <img
-                  className='user-pic'
-                  src={`${session?.user.image}`}
-                  alt={session?.user?.username}
-                />
-                {session?.user.username}
-              </a>
-            </li>
-          </Link>
+          {session && (
+            <Link
+              href={`/profile/${session?.user.username}`}
+              key={session?.user?.username}
+              passHref
+            >
+              <li className='nav-item'>
+                <a
+                  className={`nav-link ${router.pathname.includes('/profile')}`}
+                >
+                  <img
+                    className='user-pic'
+                    src={`${session?.user.image}`}
+                    alt={session?.user?.username}
+                  />
+                  {session?.user.username}
+                </a>
+              </li>
+            </Link>
+          )}
         </ul>
       </div>
     </nav>
