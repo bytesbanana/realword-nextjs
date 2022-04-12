@@ -42,16 +42,19 @@ export default NextAuth({
         password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials, req) {
-        const res = await fetch('https://api.realworld.io/api/users/login', {
-          method: 'POST',
-          body: JSON.stringify({
-            user: {
-              email: credentials?.email,
-              password: credentials?.password,
-            },
-          }),
-          headers: { 'Content-Type': 'application/json' },
-        });
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/login`,
+          {
+            method: 'POST',
+            body: JSON.stringify({
+              user: {
+                email: credentials?.email,
+                password: credentials?.password,
+              },
+            }),
+            headers: { 'Content-Type': 'application/json' },
+          }
+        );
         const data = await res.json();
 
         if (res.ok && data) {
