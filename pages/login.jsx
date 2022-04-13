@@ -38,7 +38,7 @@ const Login = () => {
             <div className='col-md-6 offset-md-3 col-xs-12'>
               <h1 className='text-xs-center'>Sign in</h1>
               <p className='text-xs-center'>
-                <Link href={'/login'}>
+                <Link href={'/register'}>
                   <a style={{ color: '#5CB85C' }}>Need an account?</a>
                 </Link>
               </p>
@@ -52,6 +52,7 @@ const Login = () => {
                     type='email'
                     placeholder='Email'
                     onChange={(e) => setEmail(e.target.value)}
+                    value={email}
                   />
                 </fieldset>
                 <fieldset className='form-group'>
@@ -60,6 +61,7 @@ const Login = () => {
                     type='password'
                     placeholder='Password'
                     onChange={(e) => setPassword(e.target.value)}
+                    value={password}
                   />
                 </fieldset>
                 <button
