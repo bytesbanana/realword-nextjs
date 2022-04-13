@@ -1,9 +1,14 @@
 import React from 'react';
 
-const ErrorList = () => {
+const ErrorList = ({ errors }) => {
   return (
-    <ul className='error-messages'>
-      <li>That email is already taken</li>
+    <ul class='error-messages'>
+      {errors &&
+        Object.keys(errors).map((key) => (
+          <li key={key}>
+            {key} {errors[key]}
+          </li>
+        ))}
     </ul>
   );
 };
