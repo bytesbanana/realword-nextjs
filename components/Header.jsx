@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useSession } from 'next-auth/react';
 
 const menus = [
   {
@@ -35,7 +34,7 @@ const menus = [
 
 const Header = () => {
   const router = useRouter();
-  const { data: session } = useSession();
+  const session = null;
 
   return (
     <nav className='navbar navbar-light'>
