@@ -2,33 +2,34 @@ import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/router';
+import ErrorList from 'components/ErrorList';
 
 const Login = () => {
   const router = useRouter();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const session = null;
+  const [errors, setErrors] = useState();
 
   const formSubmit = async (e) => {
     e.preventDefault();
-    // await signIn('credentials', {
-    //   redirect: false,
-    //   email,
-    //   password,
-    // });
-  };
 
-  useEffect(() => {
-    if (!session) return;
-    if (session?.errors) {
-      // signOut({
-      //   redirect: false,
-      // });
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        user: {
+          email,
+          password,
+        },
+      }),
+    });
+    const data = await response.json();
+    if (response.ok) {
+      router.push('/');
       return;
     }
 
-    router.push('/');
-  }, [session, router]);
+    setErrors(data.errors);
+  };
 
   return (
     <>
@@ -43,7 +44,7 @@ const Login = () => {
                 </Link>
               </p>
 
-              {/* <ErrorList /> */}
+              <ErrorList errors={errors} />
 
               <form onSubmit={formSubmit}>
                 <fieldset className='form-group'>

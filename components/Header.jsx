@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import useUser from 'lib/hooks/useUser';
 
 const menus = [
   {
@@ -34,7 +35,7 @@ const menus = [
 
 const Header = () => {
   const router = useRouter();
-  const session = null;
+  const [user] = useUser();
 
   return (
     <nav className='navbar navbar-light'>
@@ -48,7 +49,7 @@ const Header = () => {
               const isMenuNeedAuth = menu?.auth;
               if (isMenuNeedAuth === undefined) return true;
 
-              if (session) {
+              if (user) {
                 if (isMenuNeedAuth) return true;
               } else {
                 return isMenuNeedAuth === false;
@@ -68,10 +69,10 @@ const Header = () => {
               </Link>
             ))}
 
-          {session && (
+          {user && (
             <Link
-              href={`/profile/${session?.user.username}`}
-              key={session?.user?.username}
+              href={`/profile/${user.username}`}
+              key={user?.username}
               passHref
             >
               <li className='nav-item'>
@@ -80,10 +81,10 @@ const Header = () => {
                 >
                   <img
                     className='user-pic'
-                    src={`${session?.user.image}`}
-                    alt={session?.user?.username}
+                    src={`${user.image}`}
+                    alt={user?.username}
                   />
-                  {session?.user.username}
+                  {user.username}
                 </a>
               </li>
             </Link>

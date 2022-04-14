@@ -1,11 +1,13 @@
-import { signOut, getSession, useSession } from 'next-auth/react';
+// import { signOut, getSession, useSession } from 'next-auth/react';
 import React, { useState } from 'react';
 import { API_BASE_URL } from 'lib/const';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const Settings = ({ user }) => {
   const router = useRouter();
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
+  const session = null;
   const [isDisableForm, setIsDisableForm] = useState(false);
   const [image, setImage] = useState(user.image);
   const [email, setEmail] = useState(user.email);
@@ -51,6 +53,11 @@ const Settings = ({ user }) => {
     } finally {
       setIsDisableForm(false);
     }
+  };
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    await fetch('/api/logout');
   };
 
   return (
@@ -121,7 +128,8 @@ const Settings = ({ user }) => {
               </fieldset>
             </form>
             <hr />
-            <button class='btn btn-outline-danger' onClick={signOut}>
+
+            <button class='btn btn-outline-danger' onClick={handleLogout}>
               Or click here to logout.
             </button>
           </div>
@@ -131,30 +139,30 @@ const Settings = ({ user }) => {
   );
 };
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
+// export async function getServerSideProps(context) {
+//   const session = await getSession(context);
 
-  if (!session)
-    return {
-      redirect: {
-        destination: '/login',
-      },
-    };
+//   if (!session)
+//     return {
+//       redirect: {
+//         destination: '/login',
+//       },
+//     };
 
-  const props = {};
-  const response = await fetch(`${API_BASE_URL}/user`, {
-    headers: {
-      Authorization: `Token ${session.accessToken}`,
-    },
-  });
-  const { user } = await response.json();
-  if (user) {
-    props.user = user;
-  }
+//   const props = {};
+//   const response = await fetch(`${API_BASE_URL}/user`, {
+//     headers: {
+//       Authorization: `Token ${session.accessToken}`,
+//     },
+//   });
+//   const { user } = await response.json();
+//   if (user) {
+//     props.user = user;
+//   }
 
-  return {
-    props,
-  };
-}
+//   return {
+//     props,
+//   };
+// }
 
 export default Settings;
