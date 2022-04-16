@@ -121,7 +121,7 @@ const Settings = ({ user: currentUser }) => {
             </form>
             <hr />
 
-            <button class='btn btn-outline-danger' onClick={handleLogout}>
+            <button className='btn btn-outline-danger' onClick={handleLogout}>
               Or click here to logout.
             </button>
           </div>
