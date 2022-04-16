@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import useUser from 'lib/hooks/useUser';
 
 const menus = [
   {
@@ -33,9 +32,8 @@ const menus = [
   },
 ];
 
-const Header = () => {
+const Header = ({ user }) => {
   const router = useRouter();
-  const [user] = useUser();
 
   return (
     <nav className='navbar navbar-light'>
