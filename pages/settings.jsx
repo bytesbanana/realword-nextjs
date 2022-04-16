@@ -1,55 +1,36 @@
-// import { signOut, getSession, useSession } from 'next-auth/react';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { API_BASE_URL } from 'lib/const';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 
-const Settings = ({ user }) => {
+import AuthContext from 'contexts/AuthContext';
+import { withSessionSsr } from 'lib/session';
+
+const Settings = ({ user: currentUser }) => {
   const router = useRouter();
-  // const { data: session } = useSession();
-  const session = null;
+  const authContext = useContext(AuthContext);
   const [isDisableForm, setIsDisableForm] = useState(false);
-  const [image, setImage] = useState(user.image);
-  const [email, setEmail] = useState(user.email);
-  const [bio, setBio] = useState(user.bio);
-  const [username, setUsername] = useState(user.username);
-  const [password, setPassword] = useState();
+  const [user, setUser] = useState(currentUser);
 
   const updateSettings = async (e) => {
     e.preventDefault();
     setIsDisableForm(true);
     const body = {
-      user: {
-        email,
-        bio,
-        image,
-        username,
-      },
+      user,
     };
-    if (password) {
-      body.user.password = password;
-    }
+
     try {
-      const response = await fetch(`${API_BASE_URL}/user`, {
+      const response = await fetch(`api/user`, {
         method: 'PUT',
-        headers: {
-          Authorization: `Token ${session.accessToken}`,
-        },
-        body: JSON.stringify({
-          user: {
-            email,
-            bio,
-            image,
-            username,
-          },
-        }),
+        'Content-Type': 'application/json;',
+        body: JSON.stringify(body),
       });
 
       if (response.ok) {
         const data = await response.json();
-        router.push(`/profile/${data.username}`);
+        router.push(`/profile/${data.user.username}`);
       }
     } catch (error) {
+      console.log(error.response);
     } finally {
       setIsDisableForm(false);
     }
@@ -57,7 +38,10 @@ const Settings = ({ user }) => {
 
   const handleLogout = async (e) => {
     e.preventDefault();
-    await fetch('/api/logout');
+    const response = await fetch('/api/auth/logout');
+    if (response.ok) {
+      authContext.logout();
+    }
   };
 
   return (
@@ -75,8 +59,10 @@ const Settings = ({ user }) => {
                     className='form-control'
                     type='text'
                     placeholder='URL of profile picture'
-                    value={image}
-                    onChange={(e) => setImage(e.target.value)}
+                    value={user.image}
+                    onChange={(e) =>
+                      setUser({ ...user, image: e.target.value })
+                    }
                   />
                 </fieldset>
                 <fieldset className='form-group'>
@@ -85,8 +71,10 @@ const Settings = ({ user }) => {
                     className='form-control form-control-lg'
                     type='text'
                     placeholder='Your Name'
-                    onChange={(e) => setUsername(e.target.value)}
-                    value={username}
+                    value={user.username}
+                    onChange={(e) =>
+                      setUser({ ...user, username: e.target.value })
+                    }
                   />
                 </fieldset>
                 <fieldset className='form-group'>
@@ -95,8 +83,8 @@ const Settings = ({ user }) => {
                     className='form-control form-control-lg'
                     rows='8'
                     placeholder='Short bio about you'
-                    onChange={(e) => setBio(e.target.value)}
-                    value={bio}
+                    value={user.bio}
+                    onChange={(e) => setUser({ ...user, bio: e.target.value })}
                   ></textarea>
                 </fieldset>
                 <fieldset className='form-group'>
@@ -105,8 +93,10 @@ const Settings = ({ user }) => {
                     className='form-control form-control-lg'
                     type='text'
                     placeholder='Email'
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
+                    value={user.email}
+                    onChange={(e) =>
+                      setUser({ ...user, email: e.target.value })
+                    }
                   />
                 </fieldset>
                 <fieldset className='form-group'>
@@ -115,8 +105,10 @@ const Settings = ({ user }) => {
                     className='form-control form-control-lg'
                     type='password'
                     placeholder='Password'
-                    onChange={(e) => setPassword(e.target.value)}
-                    value={password}
+                    value={user?.password}
+                    onChange={(e) =>
+                      setUser({ ...user, password: e.target.value })
+                    }
                   />
                 </fieldset>
                 <button
@@ -139,30 +131,23 @@ const Settings = ({ user }) => {
   );
 };
 
-// export async function getServerSideProps(context) {
-//   const session = await getSession(context);
+export const getServerSideProps = withSessionSsr(
+  async function getServerSideProps({ req }) {
+    const user = req.session.user;
+    if (!user) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
+        },
+      };
+    }
 
-//   if (!session)
-//     return {
-//       redirect: {
-//         destination: '/login',
-//       },
-//     };
-
-//   const props = {};
-//   const response = await fetch(`${API_BASE_URL}/user`, {
-//     headers: {
-//       Authorization: `Token ${session.accessToken}`,
-//     },
-//   });
-//   const { user } = await response.json();
-//   if (user) {
-//     props.user = user;
-//   }
-
-//   return {
-//     props,
-//   };
-// }
-
+    return {
+      props: {
+        user: user ? user : null,
+      },
+    };
+  }
+);
 export default Settings;

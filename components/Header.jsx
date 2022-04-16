@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import AuthContext from '/contexts/AuthContext';
 
 const menus = [
   {
@@ -32,8 +33,9 @@ const menus = [
   },
 ];
 
-const Header = ({ user }) => {
+const Header = () => {
   const router = useRouter();
+  const { isLoggedIn, user, isLoading } = useContext(AuthContext);
 
   return (
     <nav className='navbar navbar-light'>
@@ -41,53 +43,58 @@ const Header = ({ user }) => {
         <a className='navbar-brand' href='index.html'>
           conduit
         </a>
-        <ul className='nav navbar-nav pull-xs-right'>
-          {menus
-            .filter((menu) => {
-              const isMenuNeedAuth = menu?.auth;
-              if (isMenuNeedAuth === undefined) return true;
 
-              if (user) {
-                if (isMenuNeedAuth) return true;
-              } else {
-                return isMenuNeedAuth === false;
-              }
-            })
-            .map(({ name, pathName, icon = null }) => (
-              <Link href={pathName} key={name} passHref>
+        {!isLoading && (
+          <ul className='nav navbar-nav pull-xs-right'>
+            {menus
+              .filter((menu) => {
+                const isMenuNeedAuth = menu?.auth;
+                if (isMenuNeedAuth === undefined) return true;
+
+                if (isLoggedIn) {
+                  if (isMenuNeedAuth) return true;
+                } else {
+                  return isMenuNeedAuth === false;
+                }
+              })
+              .map(({ name, pathName, icon = null }) => (
+                <Link href={pathName} key={name} passHref>
+                  <li className='nav-item'>
+                    <a
+                      className={`nav-link ${
+                        router.pathname === pathName ? 'active' : ''
+                      }`}
+                    >
+                      {icon && <i className={icon}></i>} {name}
+                    </a>
+                  </li>
+                </Link>
+              ))}
+
+            {isLoggedIn && (
+              <Link
+                href={`/profile/${user.username}`}
+                key={user?.username}
+                passHref
+              >
                 <li className='nav-item'>
                   <a
-                    className={`nav-link ${
-                      router.pathname === pathName ? 'active' : ''
-                    }`}
+                    className={`nav-link ${router.pathname.includes(
+                      '/profile'
+                    )}`}
                   >
-                    {icon && <i className={icon}></i>} {name}
+                    <img
+                      className='user-pic'
+                      src={`${user.image}`}
+                      alt={user?.username}
+                    />
+                    {user.username}
                   </a>
                 </li>
               </Link>
-            ))}
-
-          {user && (
-            <Link
-              href={`/profile/${user.username}`}
-              key={user?.username}
-              passHref
-            >
-              <li className='nav-item'>
-                <a
-                  className={`nav-link ${router.pathname.includes('/profile')}`}
-                >
-                  <img
-                    className='user-pic'
-                    src={`${user.image}`}
-                    alt={user?.username}
-                  />
-                  {user.username}
-                </a>
-              </li>
-            </Link>
-          )}
-        </ul>
+            )}
+          </ul>
+        )}
       </div>
     </nav>
   );
