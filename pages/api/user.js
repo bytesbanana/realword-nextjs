@@ -11,8 +11,6 @@ export default withSession(async (req, res) => {
     return res.status(401).json();
   }
 
-  console.log(req)
-
   const response = await fetch(`${API_BASE_URL}/user`, {
     method: req.method,
     headers: {

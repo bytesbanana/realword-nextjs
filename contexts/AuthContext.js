@@ -13,7 +13,7 @@ const AuthContext = createContext(initialState);
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  console.log(isLoading);
+
   useEffect(() => {
     (async () => {
       setIsLoading(true);
