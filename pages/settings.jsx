@@ -3,7 +3,7 @@ import { API_BASE_URL } from 'lib/const';
 import { useRouter } from 'next/router';
 
 import AuthContext from 'contexts/AuthContext';
-import { withSessionSsr } from 'lib/session';
+import { withAuthentication } from 'lib/session';
 
 const Settings = ({ user: currentUser }) => {
   const router = useRouter();
@@ -131,23 +131,13 @@ const Settings = ({ user: currentUser }) => {
   );
 };
 
-export const getServerSideProps = withSessionSsr(
-  async function getServerSideProps({ req }) {
-    const user = req.session.user;
-    if (!user) {
-      return {
-        redirect: {
-          destination: '/login',
-          permanent: false,
-        },
-      };
-    }
+export const getServerSideProps = withAuthentication(async ({ req }) => {
+  const user = req.session.user;
 
-    return {
-      props: {
-        user: user ? user : null,
-      },
-    };
-  }
-);
+  return {
+    props: {
+      user,
+    },
+  };
+});
 export default Settings;
