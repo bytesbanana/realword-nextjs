@@ -1,9 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { API_BASE_URL } from 'lib/const';
+import React, { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import AuthContext from 'contexts/AuthContext';
-import { withAuthentication } from 'lib/session';
+import { withSessionSsr } from 'lib/session';
 
 const Settings = ({ user: currentUser }) => {
   const router = useRouter();
@@ -29,8 +28,6 @@ const Settings = ({ user: currentUser }) => {
         const data = await response.json();
         router.push(`/profile/${data.user.username}`);
       }
-    } catch (error) {
-      console.log(error.response);
     } finally {
       setIsDisableForm(false);
     }
@@ -131,7 +128,7 @@ const Settings = ({ user: currentUser }) => {
   );
 };
 
-export const getServerSideProps = withAuthentication(async ({ req }) => {
+export const getServerSideProps = withSessionSsr(async ({ req }) => {
   const user = req.session.user;
 
   return {
