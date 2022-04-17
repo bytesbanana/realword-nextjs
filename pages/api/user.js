@@ -1,7 +1,7 @@
 import { withSession } from 'lib/session';
 import { API_BASE_URL } from 'lib/const';
 
-export default withSession(async function getUser(req, res) {
+export default withSession(async (req, res) => {
   if (!['GET', 'PUT'].includes(req.method)) {
     return res.status(400).json();
   }
@@ -11,17 +11,16 @@ export default withSession(async function getUser(req, res) {
     return res.status(401).json();
   }
 
-  const httpHeaders = new Headers();
-  httpHeaders.append('Content-Type', 'application/json');
-  httpHeaders.append('Authorization', `Token ${session?.user?.token}`);
+  console.log(req)
 
-  const request = new Request(`${API_BASE_URL}/user`, {
+  const response = await fetch(`${API_BASE_URL}/user`, {
     method: req.method,
-    headers: httpHeaders,
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Token ${session?.user?.token}`,
+    },
     body: req.method === 'PUT' ? req.body : undefined,
   });
-
-  const response = await fetch(request);
 
   const data = await response.json();
 
