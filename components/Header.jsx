@@ -40,9 +40,9 @@ const Header = () => {
   return (
     <nav className='navbar navbar-light'>
       <div className='container'>
-        <a className='navbar-brand' href='index.html'>
-          conduit
-        </a>
+        <Link href={'/'} passHref>
+          <a className='navbar-brand'>conduit</a>
+        </Link>
 
         {!isLoading && (
           <ul className='nav navbar-nav pull-xs-right'>
