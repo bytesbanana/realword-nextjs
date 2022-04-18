@@ -1,30 +1,34 @@
 import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import { useRouter } from 'next/router';
 import ErrorList from 'components/ErrorList';
+import AuthContext from 'contexts/AuthContext';
+import UsersAPI from 'lib/api/UsersApi';
+import useLocalStorage from 'lib/hooks/useLocalStorage';
 
 const Login = () => {
   const router = useRouter();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [errors, setErrors] = useState();
+  const { state, dispatch } = useContext(AuthContext);
+  const { user } = state;
+  try {
+    window.localStorage('user');
+  } catch (error) {}
+
+  if (user) {
+    router.push('/');
+  }
 
   const formSubmit = async (e) => {
     e.preventDefault();
-
-    const response = await fetch('/api/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({
-        user: {
-          email,
-          password,
-        },
-      }),
-    });
-    const data = await response.json();
-    if (response.ok) {
+    const data = await UsersAPI.login(email, password);
+    if (data?.user) {
+      const { user } = data;
       router.push('/');
+      dispatch({ type: 'LOGIN', payload: { user } });
       return;
     }
 
@@ -53,7 +57,6 @@ const Login = () => {
                     type='email'
                     placeholder='Email'
                     onChange={(e) => setEmail(e.target.value)}
-                    value={email}
                   />
                 </fieldset>
                 <fieldset className='form-group'>
@@ -62,7 +65,6 @@ const Login = () => {
                     type='password'
                     placeholder='Password'
                     onChange={(e) => setPassword(e.target.value)}
-                    value={password}
                   />
                 </fieldset>
                 <button
