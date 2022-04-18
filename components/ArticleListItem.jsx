@@ -1,6 +1,8 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { useContext } from 'react';
 import TagList from './TagList';
+import AuthContext from 'contexts/AuthContext';
+import { useRouter } from 'next/router';
 
 const ArticleListItem = ({ article = null }) => {
   const {
@@ -11,25 +13,37 @@ const ArticleListItem = ({ article = null }) => {
     title,
     description,
     tagList,
+    favorited,
   } = article || {};
+  const router = useRouter();
+  const authContext = useContext(AuthContext);
 
+  const handleFavoriteButtonClick = (isFav) => {
+    if (!authContext.isLoggedIn) {
+      router.push('/login');
+    }
+  };
   return (
     <>
       {article && (
         <div className='article-preview'>
           <div className='article-meta'>
-            <Link href='profile.html'>
+            <Link href={`/profile/${author?.username}`}>
               <a>
                 <img src={author?.image} alt={author?.username} />
               </a>
             </Link>
             <div className='info'>
-              <Link href={''}>
+              <Link href={`/profile/${author?.username}`}>
                 <a className='author'>{author?.username}</a>
               </Link>
               <span className='date'>{createdAt}</span>
             </div>
-            <button className='btn btn-outline-primary btn-sm pull-xs-right'>
+            <button
+              type='button'
+              className='btn btn-outline-primary btn-sm pull-xs-right'
+              onClick={() => handleFavoriteButtonClick(!favorited)}
+            >
               <i className='ion-heart' /> {favoritesCount}
             </button>
           </div>
