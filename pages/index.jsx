@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 
-import { withSessionSsr } from 'lib/session';
 import ArticlesAPI from 'lib/api/ArticlesAPI';
 import TagsAPI from 'lib/api/TagsAPI';
 
@@ -103,19 +102,16 @@ const Home = ({ user, articles: tempArticles, tagList }) => {
   );
 };
 
-export const getServerSideProps = withSessionSsr(async ({ req }) => {
-  const user = req?.session?.user;
-
+export const getServerSideProps = async ({ req }) => {
   const articles = await ArticlesAPI.getArticles();
   const tagList = await TagsAPI.getTags();
 
   return {
     props: {
-      user: user || null,
       articles: articles || [],
       tagList: tagList || [],
     },
   };
-});
+};
 
 export default Home;

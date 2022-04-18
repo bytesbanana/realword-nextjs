@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import AuthContext from 'contexts/AuthContext';
-import { withSessionSsr } from 'lib/session';
 
 const Settings = ({ user: currentUser }) => {
   const router = useRouter();
@@ -128,13 +127,9 @@ const Settings = ({ user: currentUser }) => {
   );
 };
 
-export const getServerSideProps = withSessionSsr(async ({ req }) => {
-  const user = req.session.user;
-
+export const getServerSideProps = async ({ req }) => {
   return {
-    props: {
-      user,
-    },
+    props: {},
   };
-});
+};
 export default Settings;
