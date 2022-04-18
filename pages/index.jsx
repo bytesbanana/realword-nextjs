@@ -25,8 +25,17 @@ const Home = ({ user, articles: tempArticles, tagList }) => {
     }
   }, [currentFeed]);
 
-  const handleTagSelect = (tag) => {
+  const handleTagSelect = async (tag) => {
     setTag(tag);
+
+    setLoadingArticles(true);
+    const filteredArticles = await ArticlesAPI.getArticles({
+      search: {
+        tag,
+      },
+    });
+    setArticles(filteredArticles);
+    setLoadingArticles(false);
   };
 
   const handleGlobalFeedClick = async () => {
