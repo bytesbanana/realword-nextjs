@@ -14,7 +14,7 @@ const ArticleList = ({ articles = [], isLoading }) => {
         articles &&
         articles.length > 0 &&
         articles.map((article) => (
-          <ArticleListItem key={article} article={article} />
+          <ArticleListItem key={article.slug} article={article} />
         ))}
     </>
   );
