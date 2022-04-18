@@ -35,7 +35,7 @@ const menus = [
 
 const Header = () => {
   const router = useRouter();
-  const { isLoggedIn, user, isLoading } = useContext(AuthContext);
+  const { isAuthenticated, user } = useContext(AuthContext).state;
 
   return (
     <nav className='navbar navbar-light'>
@@ -44,14 +44,14 @@ const Header = () => {
           <a className='navbar-brand'>conduit</a>
         </Link>
 
-        {!isLoading && (
+        {
           <ul className='nav navbar-nav pull-xs-right'>
             {menus
               .filter((menu) => {
                 const isMenuNeedAuth = menu?.auth;
                 if (isMenuNeedAuth === undefined) return true;
 
-                if (isLoggedIn) {
+                if (isAuthenticated) {
                   if (isMenuNeedAuth) return true;
                 } else {
                   return isMenuNeedAuth === false;
@@ -71,7 +71,7 @@ const Header = () => {
                 </Link>
               ))}
 
-            {isLoggedIn && (
+            {isAuthenticated && (
               <Link
                 href={`/profile/${user.username}`}
                 key={user?.username}
@@ -94,7 +94,7 @@ const Header = () => {
               </Link>
             )}
           </ul>
-        )}
+        }
       </div>
     </nav>
   );
