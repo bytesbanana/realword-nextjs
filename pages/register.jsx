@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { API_BASE_URL } from 'lib/const';
 import ErrorList from 'components/ErrorList';
+import AuthContext from 'contexts/AuthContext';
+import UsersAPI from 'lib/api/UsersApi';
 
 const Register = () => {
   const router = useRouter();
@@ -11,28 +13,23 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState(null);
   const [disableForm, setDisableForm] = useState(false);
+  const { state, dispatch } = useContext(AuthContext);
+  const { user: sessionUser } = state;
+
+  if (sessionUser) {
+    router.push('/');
+  }
 
   const formSubmit = async (e) => {
     e.preventDefault();
     setDisableForm(true);
-    const reqBody = {
-      user: {
-        username,
-        email,
-        password,
-      },
-    };
-    try {
-      const response = await fetch(`${API_BASE_URL}/users`, {
-        method: 'POST',
-        body: JSON.stringify(reqBody),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const data = await response.json();
 
-      if (response.ok) {
+    try {
+      const data = await UsersAPI.register(username, email, password);
+
+      if (data?.user) {
+        const { user } = data;
+        dispatch({ type: 'LOGIN', payload: { user } });
         router.push('/');
         return;
       }
