@@ -41,7 +41,7 @@ const FeedToggle = () => {
           </li>
         </Link>
         {tag && (
-          <Link href={`/`} as={`/`} passHref shallow>
+          <Link href={`/?tag=${tag}`} as={`/?tag=${tag}`} passHref shallow>
             <li className='nav-item'>
               <a className={`nav-link ${tag ? 'active' : ''}`}># {tag}</a>
             </li>
