@@ -1,16 +1,48 @@
-import Link from 'next/link';
-import React from 'react';
+import AuthContext from 'contexts/AuthContext';
+import ArticlesAPI from 'lib/api/ArticlesAPI';
+import { useRouter } from 'next/router';
+import React, { useContext, useEffect, useState } from 'react';
+
 import ArticleListItem from './ArticleListItem';
 
-const ArticleList = ({ articles = [], isLoading }) => {
+const ArticleList = () => {
+  const [articles, setArticles] = useState([]);
+  const { user } = useContext(AuthContext);
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (router.isReady) {
+      const { follow, tag } = router.query;
+
+      if (follow && tag) {
+        router.push('/', undefined, { shallow: true });
+        return;
+      }
+
+      if (follow && follow !== user?.username) {
+        router.push('/', undefined, {
+          shallow: true,
+        });
+        return;
+      }
+
+      (async () => {
+        setLoading(true);
+        setArticles(await ArticlesAPI.getArticles(!!follow, tag));
+        setLoading(false);
+      })();
+    }
+  }, [router, user]);
+
   return (
     <>
-      {isLoading && (
+      {loading && (
         <div className='article-preview'>
           <p>Loading articles...</p>
         </div>
       )}
-      {!isLoading &&
+      {!loading &&
         articles &&
         articles.length > 0 &&
         articles.map((article) => (
