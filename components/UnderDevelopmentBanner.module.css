@@ -1,0 +1,16 @@
+.ribbon {
+  background-color: salmon;
+  text-align: center;
+  padding: 0.5rem;
+  color: aliceblue;
+  z-index: 1;
+  right: 0;
+  bottom: 15%;
+  /* transform: rotate(-45deg); */
+}
+
+/* @media (max-width: 800px) {
+  .ribbon {
+    right: -25%;
+  }
+} */
