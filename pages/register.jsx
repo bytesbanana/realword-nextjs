@@ -13,8 +13,7 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState(null);
   const [disableForm, setDisableForm] = useState(false);
-  const { state, dispatch } = useContext(AuthContext);
-  const { user: sessionUser } = state;
+  const { user: sessionUser, login } = useContext(AuthContext);
 
   if (sessionUser) {
     router.push('/');
@@ -29,7 +28,7 @@ const Register = () => {
 
       if (data?.user) {
         const { user } = data;
-        dispatch({ type: 'LOGIN', payload: { user } });
+        login(user);
         router.push('/');
         return;
       }

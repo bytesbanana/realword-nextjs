@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import React, { useContext, useEffect } from 'react';
 
 const FeedToggle = () => {
-  const { isAuthenticated, user } = useContext(AuthContext).state;
+  const { isAuthenticated, user } = useContext(AuthContext);
   const router = useRouter();
 
   const { follow, tag } = router.query || {};

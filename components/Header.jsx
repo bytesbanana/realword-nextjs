@@ -35,7 +35,7 @@ const menus = [
 
 const Header = () => {
   const router = useRouter();
-  const { isAuthenticated, user } = useContext(AuthContext).state;
+  const { isAuthenticated, user } = useContext(AuthContext);
 
   return (
     <nav className='navbar navbar-light'>

@@ -5,15 +5,14 @@ import { useRouter } from 'next/router';
 import ErrorList from 'components/ErrorList';
 import AuthContext from 'contexts/AuthContext';
 import UsersAPI from 'lib/api/UsersApi';
-import useLocalStorage from 'lib/hooks/useLocalStorage';
 
 const Login = () => {
   const router = useRouter();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [errors, setErrors] = useState();
-  const { state, dispatch } = useContext(AuthContext);
-  const { user } = state;
+  const { user, login } = useContext(AuthContext);
+
   try {
     window.localStorage('user');
   } catch (error) {}
@@ -28,7 +27,7 @@ const Login = () => {
     if (data?.user) {
       const { user } = data;
       router.push('/');
-      dispatch({ type: 'LOGIN', payload: { user } });
+      login(user);
       return;
     }
 
