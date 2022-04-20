@@ -1,10 +1,8 @@
 import ArticleList from 'components/ArticleList';
-
 import Banner from 'components/Banner';
 import FeedToggle from 'components/FeedToggle';
 import PopularTags from 'components/PopularTags';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 const Home = () => {
   return (
