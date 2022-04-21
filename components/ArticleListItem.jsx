@@ -1,10 +1,12 @@
 import Link from 'next/link';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import TagList from './TagList';
 import AuthContext from 'contexts/AuthContext';
 import { useRouter } from 'next/router';
+import ArticlesAPI from 'lib/api/ArticlesAPI';
 
-const ArticleListItem = ({ article = null }) => {
+const ArticleListItem = ({ article: initArticle = null }) => {
+  const [article, setArticles] = useState(initArticle);
   const {
     author,
     createdAt,
@@ -16,12 +18,15 @@ const ArticleListItem = ({ article = null }) => {
     favorited,
   } = article || {};
   const router = useRouter();
-  const authContext = useContext(AuthContext);
+  const { isAuthenticated } = useContext(AuthContext);
 
-  const handleFavoriteButtonClick = (isFav) => {
-    if (!authContext.isLoggedIn) {
+  const handleFavoriteButtonClick = async (isFav) => {
+    if (!isAuthenticated) {
       router.push('/login');
     }
+
+    const updatedArticle = await ArticlesAPI.setFavorite(slug, isFav);
+    setArticles(updatedArticle);
   };
   return (
     <>
@@ -42,7 +47,7 @@ const ArticleListItem = ({ article = null }) => {
             <button
               type='button'
               className='btn btn-outline-primary btn-sm pull-xs-right'
-              onClick={() => handleFavoriteButtonClick(!favorited)}
+              onClick={(e) => handleFavoriteButtonClick(!favorited)}
             >
               <i className='ion-heart' /> {favoritesCount}
             </button>
