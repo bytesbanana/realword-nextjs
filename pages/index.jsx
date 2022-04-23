@@ -20,7 +20,7 @@ const Home = () => {
 
   return (
     <div className='home-page'>
-      <Banner />
+      {!isAuthenticated && <Banner />}
       <div className='container page'>
         <div className='row'>
           <div className='col-md-9'>
