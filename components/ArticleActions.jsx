@@ -4,7 +4,7 @@ import React from 'react';
 import ToggleFollowButton from './ToggleFollowButton';
 import ToggleFavoriteButton from './ToggleFavoriteButton';
 
-const ArticleActions = ({ article }) => {
+const ArticleActions = ({ article, onToggleFollow, onToggleFavorite }) => {
   if (!article) return null;
   const { author, createdAt, favorited, favoritesCount } = article;
 
@@ -23,11 +23,13 @@ const ArticleActions = ({ article }) => {
         <ToggleFollowButton
           following={author.following}
           authorName={author.username}
+          onToggle={onToggleFollow}
         />
         &nbsp;
         <ToggleFavoriteButton
           favorited={favorited}
           favoritesCount={favoritesCount}
+          onToggle={onToggleFavorite}
         />
       </div>
     </div>

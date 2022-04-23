@@ -3,7 +3,7 @@ import React from 'react';
 const ToggleFavoriteButton = ({
   favorited,
   favoritesCount,
-  onClick,
+  onToggle = () => {},
   showIconOnly,
 }) => {
   return (
@@ -11,13 +11,13 @@ const ToggleFavoriteButton = ({
       className={`btn btn-sm btn-${favorited ? '' : 'outline-'}primary ${
         showIconOnly ? 'pull-xs-right' : ''
       }`}
-      onClick={onClick}
+      onClick={() => onToggle(!favorited)}
     >
       <i className='ion-heart' />
       {!showIconOnly && (
         <>
           &nbsp; {favorited ? 'Unfavorite' : 'Favorite'} Article
-          <span className='counter'>&nbsp;({ favoritesCount})</span>
+          <span className='counter'>&nbsp;({favoritesCount})</span>
         </>
       )}
       {showIconOnly && <span className='counter'>{' ' + favoritesCount}</span>}

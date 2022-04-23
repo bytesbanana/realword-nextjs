@@ -4,7 +4,7 @@ import { formatDate } from 'lib/date-util';
 import ToggleFollowButton from './ToggleFollowButton';
 import ToggleFavoriteButton from './ToggleFavoriteButton';
 
-const ArticleBanner = ({ article }) => {
+const ArticleBanner = ({ article, onToggleFollow, onToggleFavorite }) => {
   if (!article) return null;
   const { author, createdAt, favoritesCount, favorited } = article;
 
@@ -27,11 +27,13 @@ const ArticleBanner = ({ article }) => {
           <ToggleFollowButton
             following={author.following}
             authorName={author.username}
+            onToggle={onToggleFollow}
           />
           &nbsp;&nbsp;
           <ToggleFavoriteButton
             favorited={favorited}
             favoritesCount={favoritesCount}
+            onToggle={onToggleFavorite}
           />
         </div>
       </div>
