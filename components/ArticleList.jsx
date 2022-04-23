@@ -42,6 +42,11 @@ const ArticleList = () => {
           <p>Loading articles...</p>
         </div>
       )}
+      {!loading && articles.length === 0 && (
+        <div className='article-preview'>
+          <p>No articles are here... yet.</p>
+        </div>
+      )}
       {!loading &&
         articles &&
         articles.length > 0 &&
