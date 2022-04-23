@@ -4,6 +4,7 @@ import TagList from './TagList';
 import AuthContext from 'contexts/AuthContext';
 import { useRouter } from 'next/router';
 import ArticlesAPI from 'lib/api/ArticlesAPI';
+import ToggleFavoriteButton from './ToggleFavoriteButton';
 
 const ArticleListItem = ({ article: initArticle = null }) => {
   const [article, setArticles] = useState(initArticle);
@@ -44,13 +45,12 @@ const ArticleListItem = ({ article: initArticle = null }) => {
               </Link>
               <span className='date'>{createdAt}</span>
             </div>
-            <button
-              type='button'
-              className='btn btn-outline-primary btn-sm pull-xs-right'
+            <ToggleFavoriteButton
+              favorited={favorited}
+              favoritesCount={favoritesCount}
+              showIconOnly
               onClick={(e) => handleFavoriteButtonClick(!favorited)}
-            >
-              <i className='ion-heart' /> {favoritesCount}
-            </button>
+            />
           </div>
           <Link href={`/article/${slug}`}>
             <a className='preview-link'>
