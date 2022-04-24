@@ -1,24 +1,24 @@
+import { formatDate } from 'lib/date-util';
 import React from 'react';
 
 const CommentListItem = ({ comment }) => {
+  if (!comment) return null;
   return (
     <div className='card'>
       <div className='card-block'>
-        <p className='card-text'>
-          With supporting text below as a natural lead-in to additional content.
-        </p>
+        <p className='card-text'>{comment.body}</p>
       </div>
       <div className='card-footer'>
         <a className='comment-author'>
           <img
-            src='http://i.imgur.com/Qr71crq.jpg'
+            src={comment.author.image}
             className='comment-author-img'
             alt='commentor'
           />
         </a>
         &nbsp;
-        <a className='comment-author'>Jacob Schmidt</a>
-        <span className='date-posted'>Dec 29th</span>
+        <a className='comment-author link'>&nbsp;{comment.author.username}</a>
+        <span className='date-posted'>{formatDate(comment.createdAt)}</span>
       </div>
     </div>
   );
