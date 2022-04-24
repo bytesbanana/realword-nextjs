@@ -4,15 +4,18 @@ import ArticleContent from 'components/ArticleContent';
 import CommentForm from 'components/CommentForm';
 import { CommentList } from 'components/CommentList';
 import TagList from 'components/TagList';
+import AuthContext from 'contexts/AuthContext';
 import ArticlesAPI from 'lib/api/ArticlesAPI';
 import UsersAPI from 'lib/api/UsersApi';
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
 const Article = () => {
   const router = useRouter();
   const { slug } = router.query;
   const [article, setArticle] = useState(null);
+  const [comments, setComments] = useState([]);
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
     if (!slug) return;
@@ -20,7 +23,9 @@ const Article = () => {
 
     (async () => {
       const article = await ArticlesAPI.getArticleBySlug(slug);
+      const comments = await ArticlesAPI.getCommentsBySlug(slug);
       setArticle(article);
+      setComments(comments);
     })();
   }, [router, slug]);
 
@@ -63,8 +68,8 @@ const Article = () => {
 
         <div className='row'>
           <div className='col-xs-12 col-md-8 offset-md-2'>
-            <CommentForm />
-            <CommentList comments={[{}, {}]} />
+            <CommentForm user={user} />
+            <CommentList comments={comments} />
           </div>
         </div>
       </div>
