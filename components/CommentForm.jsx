@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CommentForm = () => {
+const CommentForm = ({ user }) => {
   return (
     <form className='card comment-form'>
       <div className='card-block'>
@@ -13,9 +13,9 @@ const CommentForm = () => {
       </div>
       <div className='card-footer'>
         <img
-          src='http://i.imgur.com/Qr71crq.jpg'
+          src={user.image}
           className='comment-author-img'
-          alt='commentor'
+          alt={user.username}
         />
         <button className='btn btn-sm btn-primary'>Post Comment</button>
       </div>
