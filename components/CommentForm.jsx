@@ -1,14 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-const CommentForm = ({ user }) => {
+const CommentForm = ({ user, onPostClick }) => {
+  const [comment, setComment] = useState('');
   return (
-    <form className='card comment-form'>
+    <form
+      className='card comment-form'
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (!comment) return;
+        onPostClick(comment);
+        setComment('');
+      }}
+    >
       <div className='card-block'>
         <textarea
           className='form-control'
           placeholder='Write a comment...'
           rows={3}
-          defaultValue={''}
+          onChange={(e) => setComment(e.target.value)}
+          defaultValue=''
         />
       </div>
       <div className='card-footer'>
@@ -17,7 +27,9 @@ const CommentForm = ({ user }) => {
           className='comment-author-img'
           alt={user.username}
         />
-        <button className='btn btn-sm btn-primary'>Post Comment</button>
+        <button className='btn btn-sm btn-primary' type='submit'>
+          Post Comment
+        </button>
       </div>
     </form>
   );
