@@ -49,6 +49,12 @@ const Article = () => {
     setArticle(updatedArticle);
   };
 
+  const onPostClick = async (newComment) => {
+    if (!newComment) return;
+    const addedComment = await ArticlesAPI.commentAnArticle(slug, newComment);
+    setComments((p) => [...p, addedComment]);
+  };
+
   return (
     <div className='article-page'>
       <ArticleBanner
@@ -68,7 +74,7 @@ const Article = () => {
 
         <div className='row'>
           <div className='col-xs-12 col-md-8 offset-md-2'>
-            <CommentForm user={user} />
+            <CommentForm user={user} onPostClick={onPostClick} />
             <CommentList comments={comments} />
           </div>
         </div>
