@@ -1,12 +1,8 @@
-import AuthContext from 'contexts/AuthContext';
-import UsersAPI from 'lib/api/UsersApi';
 import { useRouter } from 'next/router';
-import React, { useContext } from 'react';
-import ToggleFollowButton from './ToggleFollowButton';
+import React from 'react';
 
-const UserInfo = ({ user, onToggleFollow }) => {
+const UserInfo = ({ user, currentUser, onToggleFollow }) => {
   const router = useRouter();
-  const { user: currentUser } = useContext(AuthContext);
 
   if (!user) return <p>Loading..</p>;
 

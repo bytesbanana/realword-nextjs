@@ -12,27 +12,33 @@ const ArticleList = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (router.isReady) {
-      const { follow, tag } = router.query;
+    if (!router.isReady) return;
+    const { follow, tag, username, favorite } = router.query;
 
-      if (follow && tag) {
-        router.push('/', undefined, { shallow: true });
-        return;
-      }
-
-      if (follow && follow !== user?.username) {
-        router.push('/', undefined, {
-          shallow: true,
-        });
-        return;
-      }
-
-      (async () => {
-        setLoading(true);
-        setArticles(await ArticlesAPI.getArticles(!!follow, tag));
-        setLoading(false);
-      })();
+    if (follow && tag) {
+      router.push('/', undefined, { shallow: true });
+      return;
     }
+
+    if (follow && follow !== user?.username) {
+      router.push('/', undefined, {
+        shallow: true,
+      });
+      return;
+    }
+
+    (async () => {
+      setLoading(true);
+      setArticles(
+        await ArticlesAPI.getArticles(
+          !!follow,
+          tag,
+          favorite ? undefined : username,
+          favorite && username
+        )
+      );
+      setLoading(false);
+    })();
   }, [router, user]);
 
   return (
