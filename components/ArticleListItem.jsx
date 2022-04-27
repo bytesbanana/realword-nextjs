@@ -20,7 +20,6 @@ const ArticleListItem = ({ article: initArticle = null }) => {
   } = article || {};
   const router = useRouter();
   const { isAuthenticated } = useContext(AuthContext);
-
   const handleFavoriteButtonClick = async (isFav) => {
     if (!isAuthenticated) {
       router.push('/login');
@@ -49,7 +48,7 @@ const ArticleListItem = ({ article: initArticle = null }) => {
               favorited={favorited}
               favoritesCount={favoritesCount}
               showIconOnly
-              onClick={(e) => handleFavoriteButtonClick(!favorited)}
+              onToggle={(e) => handleFavoriteButtonClick(!favorited)}
             />
           </div>
           <Link href={`/article/${slug}`}>
